@@ -15,7 +15,7 @@ services:
       MYSQL_DATABASE: spctn
 
     ports:
-      - "3306:3306"
+      - "3308:3306"
 
     volumes:
       - mysql_data:/var/lib/mysql
@@ -40,7 +40,7 @@ services:
 
       DB_PASSWORD: root
 
-      JWT_SECRET: tu_clave_jwt_super_larga
+      JWT_SECRET: 5d3c8d2e8d9f7c4b6a1f2e3d4c5b6a7f8e9d0c1b2a3d4e5f6a7b8c9d0e1f2a3
 
 volumes:
 
