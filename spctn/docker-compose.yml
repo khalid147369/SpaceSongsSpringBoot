@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+
+  mysql:
+
+    image: mysql:8.4
+
+    container_name: mysql-spctn
+
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: spctn
+
+    ports:
+      - "3308:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+
+    build: .
+
+    container_name: spctn-api
+
+    depends_on:
+      - mysql
+
+    ports:
+      - "8081:8081"
+
+    environment:
+
+      DB_URL: jdbc:mysql://mysql:3306/spctn
+
+      DB_USERNAME: root
+
+      DB_PASSWORD: root
+
+      JWT_SECRET: 5d3c8d2e8d9f7c4b6a1f2e3d4c5b6a7f8e9d0c1b2a3d4e5f6a7b8c9d0e1f2a3
+
+volumes:
+
+  mysql_data:
