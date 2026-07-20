@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
 	    @ExceptionHandler(Exception.class)
 	    public ResponseEntity<String> handleGeneral(Exception ex){
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body("Ha ocurrido un error interno.");
+	                .body("Ha producido un error interno: "+ex.getMessage()); 
 	    }
 	    
 	    @ExceptionHandler(MethodArgumentNotValidException.class)
