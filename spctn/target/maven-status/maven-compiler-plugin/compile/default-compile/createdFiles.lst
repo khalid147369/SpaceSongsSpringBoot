@@ -7,6 +7,7 @@ com\example\spctn\Security\AuthController.class
 com\example\spctn\Dto\Request\CommentRequestDTO.class
 com\example\spctn\Controller\SavedSongController.class
 com\example\spctn\Mapper\ListenMapper.class
+com\example\spctn\Service\Impl\CloudinaryService.class
 com\example\spctn\Service\Impl\SavedSongServiceImpl.class
 com\example\spctn\Service\LikeService.class
 com\example\spctn\Exeption\ApiError.class
@@ -40,6 +41,7 @@ com\example\spctn\Service\SavedSongService.class
 com\example\spctn\Entity\Listen.class
 com\example\spctn\Dto\Request\LikeRequestDTO.class
 com\example\spctn\Config\CorsConfig.class
+com\example\spctn\Config\CloudinaryConfig.class
 com\example\spctn\Repository\ListenRepository.class
 com\example\spctn\Dto\Request\SavedSongRequestDTO.class
 com\example\spctn\Repository\RefreshTokenRepository.class
