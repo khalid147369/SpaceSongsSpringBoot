@@ -1,5 +1,6 @@
 package com.example.spctn.Controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -7,9 +8,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
 import com.example.spctn.Dto.Response.LikeResponseDTO;
@@ -19,6 +22,7 @@ import com.example.spctn.Entity.Song;
 import com.example.spctn.Mapper.LikeMapper;
 import com.example.spctn.Mapper.SongMapper;
 import com.example.spctn.Service.SongService;
+import com.example.spctn.Service.Impl.CloudinaryService;
 
 import jakarta.validation.Valid;
 @RestController
@@ -26,13 +30,16 @@ import jakarta.validation.Valid;
 public class SongController {
 
     private final SongService service;
+    private final CloudinaryService cloudinaryService;
     private final SongMapper mapper;
     private final LikeMapper likeMapper;
 
-    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper) {
+    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,CloudinaryService cloudinaryService) {
         this.service = service;
         this.mapper = mapper;
         this.likeMapper = likeMapper;
+        this.cloudinaryService = cloudinaryService;
+
     }
 
     /**
@@ -85,12 +92,23 @@ public class SongController {
      * Guardar una nueva canción
      * @param song
      * @return
+     * @throws IOException 
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<SongResponseDTO>  save(@Valid @RequestBody SongRequestDTO song) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SongResponseDTO>  save(@Valid @RequestPart("data") SongRequestDTO songDto,
+            @RequestPart("audio") MultipartFile audioFile,
+            @RequestPart(value = "imagen") MultipartFile imageFile) throws IOException {
     	
-    	Song sn = service.save( mapper.toEntity(song));
+    	String urlAudio = cloudinaryService.uploadFile(audioFile, "canciones");
+        
+        // 2. Rellenas los datos que le faltaban al DTO
+        songDto.setUrl(urlAudio);
+
+        String urlImagen = cloudinaryService.uploadFile(imageFile, "portadas");
+        songDto.setImagen(urlImagen);
+    	
+    	Song sn = service.save( mapper.toEntity(songDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(sn));
     }
 

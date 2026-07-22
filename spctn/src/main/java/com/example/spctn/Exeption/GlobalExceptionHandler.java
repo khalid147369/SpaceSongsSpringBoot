@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -63,6 +64,17 @@ public class GlobalExceptionHandler {
 	                .map(error -> error.getDefaultMessage())
 	                .findFirst()
 	                .orElse("Validation error");
+
+	        // 3. Devuelve un estado 400 (Bad Request) con tu mensaje
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body(errorMessage);
+	    }
+	    
+	    @ExceptionHandler(BadCredentialsException.class)
+	    public ResponseEntity<String> handleValidationExceptions(BadCredentialsException ex) {
+	        
+	        // 2. Extrae el primer error y obtiene solo el mensaje limpio
+	        String errorMessage = ex.getMessage();
 
 	        // 3. Devuelve un estado 400 (Bad Request) con tu mensaje
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
