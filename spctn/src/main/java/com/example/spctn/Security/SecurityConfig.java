@@ -53,6 +53,7 @@ public class SecurityConfig {
                     		 	"/auth/**",
                     		 	"/users/auth/register",
                     		 	"/songs/getAll",
+                    		 	"/songs/test-version",
                     	        "/songs/getSingle/*",
                     	        "/songs/*/comments",
                     	        "/songs/*/likes/count").permitAll()
