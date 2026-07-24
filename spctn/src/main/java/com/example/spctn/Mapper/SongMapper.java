@@ -1,6 +1,8 @@
 package com.example.spctn.Mapper;
 
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
@@ -12,10 +14,7 @@ import com.example.spctn.Service.UserService;
 @Component
 public class SongMapper {
 	
-	private final UserService userService;
-	SongMapper(UserService userService){
-	    this.userService=userService;		
-	}
+	
     public SongResponseDTO toResponse(Song song) {
     	
     	
@@ -23,14 +22,29 @@ public class SongMapper {
         SongResponseDTO dto = new SongResponseDTO();
 
         dto.setId(song.getId());
-        dto.setTitulo(song.getTitulo());
-        dto.setUrl(song.getUrl());
-
-
-        dto.setImagen(song.getImagen());
+        dto.setTitle(song.getTitulo());
+        dto.setAudioUrl(song.getUrl());
+        dto.setCartoon(song.getCartoon());
+        dto.setCover(song.getImagen());
+        dto.setDuration(song.getDuracion());
+        dto.setYear(song.getAnoEmision());
+        dto.setListens(song.getNumEscuchas());
+        dto.setLikes(song.getNumlikes());
+        dto.setDescription(song.getDescripcion());
+        dto.setIsNew(song.getIsNew());
+        dto.setCategory(song.getTipo());
         dto.setCreador(song.getCreador());
-        dto.setTipo(song.getTipo());
-        dto.setNumlikes(song.getNumlikes());
+        
+        // quita las condiciones después 
+        if (song.getEstado()!= null) {
+			dto.setStatus(song.getEstado().toString());
+		}else {
+			dto.setStatus(null);
+		}
+        
+
+       
+        
 
         return dto;
     }
@@ -40,13 +54,17 @@ public class SongMapper {
         Song song = new Song();
 
 
-        song.setTitulo(dto.getTitulo());
+        song.setTitulo(dto.getTitle());
         song.setUrl(dto.getUrl());
 
 
-        song.setImagen(dto.getImagen());
-        song.setCreador(userService.getAuthenticatedUser().getId());
-        song.setTipo(dto.getTipo());
+        song.setImagen(dto.getImage());
+        song.setTipo(dto.getCategory());
+        song.setAnoEmision(dto.getReleseYear());
+        song.setCartoon(dto.getCartoon());
+        song.setDescripcion(dto.getDescription());
+        song.setFechaCreacion(LocalDateTime.now());
+        song.setDuracion(dto.getDuration());
 
 
         return song;

@@ -71,6 +71,20 @@ public class SongServiceImpl implements SongService {
     	return Incrementedlikes ;
     }
     
+    public Long incrementarEscuchas(Long id) {
+    	Song song = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Song not found") );
+
+    	if (song.getNumEscuchas()==null) {
+    		song.setNumlikes(0L);
+		}
+    	Long IncrementedEscuchas =song.getNumEscuchas() + 1;
+    	
+    	song.setNumEscuchas(IncrementedEscuchas);
+    	repository.save(song);
+    	
+    	return IncrementedEscuchas ;
+    }
+    
     public Long decrementarLikes(Long id) {
     	Song song = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Song not found"));
 
@@ -87,6 +101,8 @@ public class SongServiceImpl implements SongService {
     	
     	return decrementedlikes ;
     }
+    
+
     
     public List<Like> getLikes(Long id) {
     	if (id==null) {
@@ -113,28 +129,7 @@ public class SongServiceImpl implements SongService {
         }
         
       
-        Song sn = new Song();
-  
-        if (song.getImagen()!=null) {
-			 sn.setImagen(song.getImagen());
-		}
-        
-        if (song.getTitulo()!=null) {
-			 sn.setTitulo(song.getTitulo());
-		}
-        
-        if (song.getUrl()!=null) {
-			 sn.setUrl(song.getUrl());
-		}
-        
-        if (song.getTipo()!=null) {
-			 sn.setTipo(song.getTipo());
-		}
-        
-        if (song.getCreador()!=null) {
-			 sn.setCreador(song.getCreador());
-		}
-        return repository.save(sn);
+        return repository.save(song);
         
     }
 

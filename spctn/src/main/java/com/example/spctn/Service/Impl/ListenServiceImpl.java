@@ -7,15 +7,18 @@ import com.example.spctn.Service.ListenService;
 import com.example.spctn.Exeption.BadRequestException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class ListenServiceImpl implements ListenService {
 
     private final ListenRepository repository;
-
-    public ListenServiceImpl(ListenRepository repository) {
+    private final SongServiceImpl songService;
+    
+    public ListenServiceImpl(ListenRepository repository,SongServiceImpl songService) {
         this.repository = repository;
+        this.songService = songService;
     }
 
 
@@ -27,13 +30,13 @@ public class ListenServiceImpl implements ListenService {
 		}
         return repository.countBySongId(SongId);
     }
-
+    @Transactional
     @Override
     public Listen save(Listen listen) {
-    	if (listen == null) {
-			throw new BadRequestException("listen must not be null");
-		}
-        return repository.save(listen);
+    	
+    	Listen listenDetails = repository.save(listen);
+        songService.incrementarEscuchas(listen.getSong().getId());
+        return listenDetails; 
     }
 
 

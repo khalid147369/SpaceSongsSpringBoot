@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
+import com.example.spctn.Dto.Response.CloudinaryResponse;
 import com.example.spctn.Dto.Response.LikeResponseDTO;
 import com.example.spctn.Dto.Response.SongResponseDTO;
 import com.example.spctn.Entity.Like;
@@ -22,6 +23,7 @@ import com.example.spctn.Entity.Song;
 import com.example.spctn.Mapper.LikeMapper;
 import com.example.spctn.Mapper.SongMapper;
 import com.example.spctn.Service.SongService;
+import com.example.spctn.Service.UserService;
 import com.example.spctn.Service.Impl.CloudinaryService;
 
 import jakarta.validation.Valid;
@@ -33,12 +35,14 @@ public class SongController {
     private final CloudinaryService cloudinaryService;
     private final SongMapper mapper;
     private final LikeMapper likeMapper;
+    private final UserService userService;
 
-    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,CloudinaryService cloudinaryService) {
+    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,CloudinaryService cloudinaryService,UserService userService) {
         this.service = service;
         this.mapper = mapper;
         this.likeMapper = likeMapper;
         this.cloudinaryService = cloudinaryService;
+        this.userService = userService;
 
     }
 
@@ -100,15 +104,24 @@ public class SongController {
             @RequestPart("audio") MultipartFile audioFile,
             @RequestPart(value = "imagen") MultipartFile imageFile) throws IOException {
     	
-    	String urlAudio = cloudinaryService.uploadFile(audioFile, "canciones");
-        
+    	CloudinaryResponse audioResponse = cloudinaryService.uploadFile(audioFile, "canciones");
+    	CloudinaryResponse imageResponse = cloudinaryService.uploadFile(imageFile, "portadas");
+    	
+    	String urlAudio = audioResponse.getUrl();
+    	String urlImagen = imageResponse.getUrl();
+        Double duracion = audioResponse.getDuration();
         // 2. Rellenas los datos que le faltaban al DTO
         songDto.setUrl(urlAudio);
-
-        String urlImagen = cloudinaryService.uploadFile(imageFile, "portadas");
-        songDto.setImagen(urlImagen);
+        songDto.setImage(urlImagen);
+        songDto.setDuration(duracion);
     	
-    	Song sn = service.save( mapper.toEntity(songDto));
+
+    
+    	Long userId =userService.getAuthenticatedUser().getId();
+    	Song sngToSave = mapper.toEntity(songDto);
+    	sngToSave.setCreador(userId);
+    	Song sn = service.save(sngToSave);
+     
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(sn));
     }
 

@@ -8,12 +8,19 @@ import lombok.Setter;
 public class SongResponseDTO {
 
     private Long id;
-    private String titulo;
-    private String url;
-    private String imagen;
-    private String tipo;
-    private Long numlikes;
+    private String title;
+    private String audioUrl;
+    private String cover;
+    private String category;
+    private String cartoon;
+    private Long likes;
+    private Long listens;
+    private Double duration;
+    private Integer year;
+    private String description;
+    private Boolean isNew;
     private Long creador;
+    private String status;
 
 
 }
