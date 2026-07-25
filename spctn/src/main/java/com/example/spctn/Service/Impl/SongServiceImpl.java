@@ -75,7 +75,7 @@ public class SongServiceImpl implements SongService {
     	Song song = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Song not found") );
 
     	if (song.getNumEscuchas()==null) {
-    		song.setNumlikes(0L);
+    		song.setNumEscuchas(0L);
 		}
     	Long IncrementedEscuchas =song.getNumEscuchas() + 1;
     	
