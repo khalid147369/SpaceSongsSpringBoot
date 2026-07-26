@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                      .requestMatchers(
                     		 	"/auth/**",
-                    		 	"/categories",
+                    		 	"/categories/getAll",
                     		 	"/categories/getById/{id}",
                     		 	"/users/auth/register",
                     		 	"/songs/getAll",
