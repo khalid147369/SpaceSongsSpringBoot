@@ -32,16 +32,14 @@ import jakarta.validation.Valid;
 public class SongController {
 
     private final SongService service;
-    private final CloudinaryService cloudinaryService;
     private final SongMapper mapper;
     private final LikeMapper likeMapper;
     private final UserService userService;
 
-    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,CloudinaryService cloudinaryService,UserService userService) {
+    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,UserService userService) {
         this.service = service;
         this.mapper = mapper;
         this.likeMapper = likeMapper;
-        this.cloudinaryService = cloudinaryService;
         this.userService = userService;
 
     }
@@ -53,9 +51,10 @@ public class SongController {
     @GetMapping("/getAll")
     public ResponseEntity<List<SongResponseDTO>> findAll(
     		@RequestParam(required = false) String titulo,
-    		@RequestParam(required = false) String tipo,
+    		@RequestParam(required = false) Long category,
+    		@RequestParam(required = false) String numEscuchas,
             @PageableDefault(page = 0, size = 20, sort = "titulo", direction = Sort.Direction.ASC) Pageable pageable) {
-    	List<SongResponseDTO> songs =service.findAll(titulo,tipo,pageable).stream().map(mapper::toResponse).toList();
+    	List<SongResponseDTO> songs =service.findAll(titulo,category,pageable).stream().map(mapper::toResponse).toList();
         return ResponseEntity.ok(songs) ;
     }
 
@@ -100,27 +99,10 @@ public class SongController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<SongResponseDTO>  save(@Valid @RequestPart("data") SongRequestDTO songDto,
-            @RequestPart("audio") MultipartFile audioFile,
-            @RequestPart(value = "imagen") MultipartFile imageFile) throws IOException {
+    public ResponseEntity<SongResponseDTO>  save(@Valid @ModelAttribute SongRequestDTO songDto) throws IOException {
     	
-    	CloudinaryResponse audioResponse = cloudinaryService.uploadFile(audioFile, "canciones");
-    	CloudinaryResponse imageResponse = cloudinaryService.uploadFile(imageFile, "portadas");
-    	
-    	String urlAudio = audioResponse.getUrl();
-    	String urlImagen = imageResponse.getUrl();
-        Double duracion = audioResponse.getDuration();
-        // 2. Rellenas los datos que le faltaban al DTO
-        songDto.setUrl(urlAudio);
-        songDto.setImage(urlImagen);
-        songDto.setDuration(duracion);
-    	
-
-    
-    	Long userId =userService.getAuthenticatedUser().getId();
-    	Song sngToSave = mapper.toEntity(songDto);
-    	sngToSave.setCreador(userId);
-    	Song sn = service.save(sngToSave);
+ 
+    	Song sn = service.save(songDto);
      
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(sn));
     }
@@ -156,5 +138,17 @@ public class SongController {
     @GetMapping("/test-version")
     public ResponseEntity<String> testVersion() {
         return ResponseEntity.ok("SERVIDOR ACTUALIZADO - VERSION 999 - FECHA Y HORA koko: " + java.time.LocalDateTime.now());
+    }
+    
+    @GetMapping("/trending")
+    public ResponseEntity<List<SongResponseDTO>> getTrendingThisWeek(
+            @RequestParam(defaultValue = "10") int limit) {
+
+        List<SongResponseDTO> trendingSongs = service.getTrendingThisWeek(limit)
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
+
+        return ResponseEntity.ok(trendingSongs);
     }
 }

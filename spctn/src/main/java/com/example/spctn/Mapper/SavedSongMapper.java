@@ -41,12 +41,12 @@ public class SavedSongMapper {
         return dto;
     }
 
-    public SavedSong toEntity(SavedSongRequestDTO savedsong) {
+    public SavedSong toEntity(Long songId) {
 
     	SavedSong guardado = new SavedSong();
     	Long userId = userService.getAuthenticatedUser().getId();
         guardado.setUser(userService.findById(userId));
-        guardado.setSong(songService.findById(savedsong.getSongId()));
+        guardado.setSong(songService.findById(songId));
         guardado.setFecha(LocalDateTime.now());
         
       

@@ -44,9 +44,9 @@ public class SavedSongController {
      * @param guardado
      * @return
      */
-    @PostMapping
-    public ResponseEntity<SavedSongResponseDTO>  save(@Valid @RequestBody SavedSongRequestDTO guardado) {
-    	SavedSong savedSong = service.save(savedSongMapper.toEntity(guardado));
+    @PostMapping("/{songId}")
+    public ResponseEntity<SavedSongResponseDTO>  save(@PathVariable Long songId) {
+    	SavedSong savedSong = service.save(savedSongMapper.toEntity(songId));
         return ResponseEntity.ok(savedSongMapper.toResponse(savedSong)) ;
     }
 

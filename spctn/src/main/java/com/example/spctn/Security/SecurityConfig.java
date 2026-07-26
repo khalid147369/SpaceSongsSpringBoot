@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -47,13 +49,23 @@ public class SecurityConfig {
                 
 	                .sessionManagement(session ->
 	                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                
+	                .exceptionHandling(exception -> exception
+	                        .authenticationEntryPoint((request, response, authException) -> {
+	                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+	                        })
+	                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+	                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+	                        })
+	                    )
                 .authorizeHttpRequests(auth -> auth
                      .requestMatchers(
                     		 	"/auth/**",
+                    		 	"/categories",
+                    		 	"/categories/getById/{id}",
                     		 	"/users/auth/register",
                     		 	"/songs/getAll",
                     		 	"/songs/test-version",
+                    		 	"/songs/trending",
                     	        "/songs/getSingle/*",
                     	        "/songs/*/comments",
                     	        "/songs/*/likes/count").permitAll()

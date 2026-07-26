@@ -1,6 +1,8 @@
 package com.example.spctn.Dto.Request;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,22 +21,24 @@ public class SongRequestDTO {
 	@Size(max = 50, message = "The cartoon name must not exceed 50 characters")
 	private String cartoon;
 	
-    private String url;
     
     @NotNull
     private Integer releseYear;
     
-
-    private String image;
     
     @NotBlank
 	@Size(max = 200, message = "The description must not exceed 200 characters")
     private String description;
     
-	@NotBlank
-    private String category;
+	@NotNull
+    private Long category;
 	
-	private Double duration;
+	
+	@NotNull
+	private MultipartFile audioFile;
+	
+	@NotNull
+	private MultipartFile imageFile;
 
 
 }

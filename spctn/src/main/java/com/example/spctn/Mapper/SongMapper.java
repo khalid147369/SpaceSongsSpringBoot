@@ -32,7 +32,7 @@ public class SongMapper {
         dto.setLikes(song.getNumlikes());
         dto.setDescription(song.getDescripcion());
         dto.setIsNew(song.getIsNew());
-        dto.setCategory(song.getTipo());
+        dto.setCategory(song.getCategory().getId());
         dto.setCreador(song.getCreador());
         
         // quita las condiciones después 
@@ -55,16 +55,10 @@ public class SongMapper {
 
 
         song.setTitulo(dto.getTitle());
-        song.setUrl(dto.getUrl());
-
-
-        song.setImagen(dto.getImage());
-        song.setTipo(dto.getCategory());
         song.setAnoEmision(dto.getReleseYear());
         song.setCartoon(dto.getCartoon());
         song.setDescripcion(dto.getDescription());
         song.setFechaCreacion(LocalDateTime.now());
-        song.setDuracion(dto.getDuration());
 
 
         return song;

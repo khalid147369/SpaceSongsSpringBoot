@@ -1,40 +1,60 @@
 package com.example.spctn.Service.Impl;
 
 
+import com.example.spctn.Dto.Request.SongRequestDTO;
+import com.example.spctn.Dto.Response.CloudinaryResponse;
+import com.example.spctn.Entity.Category;
 import com.example.spctn.Entity.Like;
 import com.example.spctn.Entity.Song;
 import com.example.spctn.Exeption.BadRequestException;
 import com.example.spctn.Exeption.DuplicateResourceException;
 import com.example.spctn.Exeption.ResourceNotFoundException;
+import com.example.spctn.Mapper.SongMapper;
+import com.example.spctn.Repository.CategoryRepository;
 import com.example.spctn.Repository.LikeRepository;
+import com.example.spctn.Repository.ListenRepository;
 import com.example.spctn.Repository.SongRepository;
 import com.example.spctn.Service.SongService;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
-
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class SongServiceImpl implements SongService {
 
     private final SongRepository repository;
+    private final CategoryRepository categoryRepository;
     private final LikeRepository likeRepository;
+    private final ListenRepository listenRepository;
+    private final UserServiceImpl userService;
+    private final CloudinaryService cloudinaryService;
+    private final SongMapper mapper;
 
-    public SongServiceImpl(SongRepository repository,LikeRepository likeRepository) {
+    public SongServiceImpl(SongRepository repository,LikeRepository likeRepository,ListenRepository listenRepository,CloudinaryService cloudinaryService,UserServiceImpl userService,SongMapper mapper,CategoryRepository categoryRepository) {
         this.repository = repository;
         this.likeRepository = likeRepository;
+        this.listenRepository = listenRepository;
+        this.cloudinaryService = cloudinaryService;
+        this.userService = userService;
+        this.categoryRepository = categoryRepository;
+        this.mapper = mapper;
     }
 
-    public Page<Song> findAll(String title,String tipo,Pageable pageable) {
+    public Page<Song> findAll(String title,Long category,Pageable pageable) {
     	 
     	if (title != null && !title.isEmpty()) {
             return repository.findByTituloContainingIgnoreCase(title, pageable);
         }
-    	if (tipo != null && !tipo.isEmpty()) {
-            return repository.findByTipoContainingIgnoreCase(tipo, pageable);
+    	if (category != null) {
+            return repository.findByCategoryId(category, pageable);
         }
         return repository.findAll(pageable);
     }
@@ -116,20 +136,35 @@ public class SongServiceImpl implements SongService {
         return likes;
     }
 
-    public Song save(Song song) {
+    public Song save(SongRequestDTO songDto) throws IOException  {
 
-    	if (song==null) {
-        	throw new BadRequestException("Song shoud not be null");
-		}
  
-    	boolean existe = repository.existsByTitulo(song.getTitulo());	
+
+        
+       	CloudinaryResponse audioResponse = cloudinaryService.uploadFile(songDto.getAudioFile(), "canciones");
+    	CloudinaryResponse imageResponse = cloudinaryService.uploadFile(songDto.getImageFile(), "portadas");
+    	
+    	String urlAudio = audioResponse.getUrl();
+    	String urlImagen = imageResponse.getUrl();
+        Double duracion = audioResponse.getDuration();
+
+        Category category = categoryRepository.findById(songDto.getCategory()).orElseThrow(()-> new ResourceNotFoundException("Category not found"));
+    	
+    	Long userId =userService.getAuthenticatedUser().getId();
+    	Song sngToSave = mapper.toEntity(songDto);
+    	
+    	boolean existe = repository.existsByTitulo(sngToSave.getTitulo());	
     	
     	if (existe) {
     		throw new DuplicateResourceException("Song already exist");
         }
-        
+    	sngToSave.setCreador(userId);
+    	sngToSave.setCategory(category);
+    	sngToSave.setImagen(urlImagen);
+    	sngToSave.setUrl(urlAudio);
+    	sngToSave.setDuracion(duracion);
       
-        return repository.save(song);
+        return repository.save(sngToSave);
         
     }
 
@@ -157,8 +192,8 @@ public class SongServiceImpl implements SongService {
 			 sn.setUrl(song.getUrl());
 		}
         
-        if (song.getTipo()!=null) {
-			 sn.setTipo(song.getTipo());
+        if (song.getCategory()!=null) {
+			 sn.setCategory(song.getCategory());
 		}
         
 
@@ -171,4 +206,13 @@ public class SongServiceImpl implements SongService {
 		}
         repository.deleteById(id);
     }
+    
+
+    public List<Song> getTrendingThisWeek(int limit) {
+        LocalDateTime haceUnaSemana = LocalDateTime.now().minusDays(7);
+        Pageable pageable = PageRequest.of(0, limit);
+            
+        return listenRepository.findTrendingSongsSince(haceUnaSemana, pageable);
+    }
+    
 }

@@ -31,7 +31,9 @@ public class Song {
     @Enumerated(EnumType.STRING)
     private SongStatus estado=SongStatus.DRAFT;
     
-    private String tipo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
     
     private String descripcion;
     

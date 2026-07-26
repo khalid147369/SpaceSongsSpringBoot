@@ -15,10 +15,10 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 	
 	Optional<Song> findByTitulo(String titulo);
 	
-	List<Song> findByTipo(String tipo);
+	List<Song> findByCategoryId(Long CategoryId);
 	
 	boolean existsByTitulo(String titulo);
 	
 	Page<Song> findByTituloContainingIgnoreCase(String titulo, Pageable pageable);
-	Page<Song> findByTipoContainingIgnoreCase(String tipo, Pageable pageable);
+	Page<Song> findByCategoryId(Long categoryId, Pageable pageable);
 }
