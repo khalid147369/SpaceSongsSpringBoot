@@ -1,6 +1,7 @@
 package com.example.spctn.Dto.Response;
 
-import java.time.LocalDateTime;
+
+import java.time.OffsetDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ public class CommentResponseDTO {
 	    private Long id;
 	    private String text;
 	    private String creator;
-	    private LocalDateTime date;
+	    private OffsetDateTime date;
 	    private Long userId;
 	    private Long songId;
 

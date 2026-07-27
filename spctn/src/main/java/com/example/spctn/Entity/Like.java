@@ -6,8 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.List;
+
+import java.time.OffsetDateTime;
+
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime fecha;
+    private OffsetDateTime fecha;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -67,11 +67,11 @@ public class AuthController {
         
      // 4. Creamos la Cookie HttpOnly
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
-                .path("/auth")     // Solo se envía a las rutas de autenticación
+                .path("/")     // Solo se envía a las rutas de autenticación
                 .maxAge(7 * 24 * 60 * 60) // 7 días de duración
                 .httpOnly(true)        // JavaScript no puede leerla
                 .secure(false)         // Cámbialo a true cuando uses HTTPS en producción
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .build();
         
 

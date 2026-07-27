@@ -4,15 +4,15 @@ package com.example.spctn.Mapper;
 
 
 
-import java.time.LocalDateTime;
+
+import java.time.OffsetDateTime;
 
 import org.springframework.stereotype.Component;
 
-import com.example.spctn.Dto.Request.SavedSongRequestDTO;
+
 import com.example.spctn.Dto.Response.SavedSongResponseDTO;
 import com.example.spctn.Entity.SavedSong;
-import com.example.spctn.Entity.Song;
-import com.example.spctn.Entity.User;
+
 import com.example.spctn.Service.SongService;
 import com.example.spctn.Service.UserService;
 
@@ -47,7 +47,7 @@ public class SavedSongMapper {
     	Long userId = userService.getAuthenticatedUser().getId();
         guardado.setUser(userService.findById(userId));
         guardado.setSong(songService.findById(songId));
-        guardado.setFecha(LocalDateTime.now());
+        guardado.setFecha(OffsetDateTime.now());
         
       
         return guardado;

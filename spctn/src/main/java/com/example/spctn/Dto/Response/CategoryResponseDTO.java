@@ -1,7 +1,7 @@
 package com.example.spctn.Dto.Response;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class CategoryResponseDTO {
@@ -9,5 +9,5 @@ public class CategoryResponseDTO {
     private String nombre;
     private String descripcion;
     private String imageUrl;
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 }

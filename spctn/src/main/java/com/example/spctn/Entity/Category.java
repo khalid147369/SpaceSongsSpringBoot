@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "categories")
@@ -27,11 +28,11 @@ public class Category {
 
     private String imageUrl; // URL de la imagen del planeta/categoría
 
-    private LocalDateTime updatedAt; // Mantiene el rastro de "Updated 2d ago"
+    private OffsetDateTime updatedAt; // Mantiene el rastro de "Updated 2d ago"
 
     @PrePersist
     @PreUpdate
     public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
     }
 }

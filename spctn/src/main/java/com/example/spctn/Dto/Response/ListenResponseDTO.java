@@ -1,6 +1,7 @@
 package com.example.spctn.Dto.Response;
 
-import java.time.LocalDateTime;
+
+import java.time.OffsetDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,5 +17,5 @@ public class ListenResponseDTO {
     private Long songId;
     private String cancion;
     
-    private LocalDateTime fecha;
+    private OffsetDateTime fecha;
 }

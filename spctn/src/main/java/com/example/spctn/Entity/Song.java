@@ -6,7 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.example.spctn.Enums.SongStatus;
@@ -47,14 +48,14 @@ public class Song {
     
     private Integer anoEmision;
     
-    private LocalDateTime fechaCreacion;
+    private OffsetDateTime fechaCreacion;
 
  // Método que calcula si la canción tiene menos de 14 días de lanzada
     public boolean getIsNew() {
         if (this.fechaCreacion == null) return false;
         
         // Define tu regla: por ejemplo, 14 días
-        LocalDateTime limitDate = LocalDateTime.now().minusDays(3);
+        OffsetDateTime limitDate = OffsetDateTime.now().minusDays(3);
         
         return this.fechaCreacion.isAfter(limitDate);
     }

@@ -2,17 +2,16 @@ package com.example.spctn.Mapper;
 
 
 
-import java.time.LocalDateTime;
 
+import java.time.OffsetDateTime;
 
 import org.springframework.stereotype.Component;
 
-import com.example.spctn.Dto.Request.ListenRequestDTO;
+
 import com.example.spctn.Dto.Response.ListenResponseDTO;
 
 import com.example.spctn.Entity.Listen;
-import com.example.spctn.Entity.Song;
-import com.example.spctn.Entity.User;
+
 import com.example.spctn.Service.SongService;
 import com.example.spctn.Service.UserService;
 
@@ -49,7 +48,7 @@ public class ListenMapper {
         Listen listen = new Listen();
 
         
-        listen.setFecha(LocalDateTime.now());
+        listen.setFecha(OffsetDateTime.now());
         listen.setUser(userService.getAuthenticatedUser());
         listen.setSong(songService.findById(songId));
 

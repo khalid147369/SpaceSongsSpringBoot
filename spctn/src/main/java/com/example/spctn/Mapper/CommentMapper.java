@@ -2,8 +2,8 @@ package com.example.spctn.Mapper;
 
 
 
-import java.time.LocalDateTime;
 
+import java.time.OffsetDateTime;
 
 import org.springframework.stereotype.Component;
 
@@ -47,7 +47,7 @@ public class CommentMapper {
     	Comment comentario = new Comment();
 
         comentario.setTexto(dto.getText());
-        comentario.setFecha(LocalDateTime.now());
+        comentario.setFecha(OffsetDateTime.now());
         comentario.setUser(user);
         comentario.setSong(song);
 

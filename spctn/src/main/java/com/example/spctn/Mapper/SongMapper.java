@@ -1,14 +1,15 @@
 package com.example.spctn.Mapper;
 
 
-import java.time.LocalDateTime;
+
+import java.time.OffsetDateTime;
 
 import org.springframework.stereotype.Component;
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
 import com.example.spctn.Dto.Response.*;
 import com.example.spctn.Entity.Song;
-import com.example.spctn.Service.UserService;
+
 
 
 @Component
@@ -58,7 +59,7 @@ public class SongMapper {
         song.setAnoEmision(dto.getReleseYear());
         song.setCartoon(dto.getCartoon());
         song.setDescripcion(dto.getDescription());
-        song.setFechaCreacion(LocalDateTime.now());
+        song.setFechaCreacion(OffsetDateTime.now());
 
 
         return song;
