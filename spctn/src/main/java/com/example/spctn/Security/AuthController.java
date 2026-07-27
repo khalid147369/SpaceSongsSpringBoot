@@ -106,11 +106,11 @@ public class AuthController {
 
         // 2. Creamos una cookie idéntica pero con maxAge(0) para obligar al navegador a borrarla
         ResponseCookie deleteRefreshCookie = ResponseCookie.from("refreshToken", "")
-                .path("/api/auth")
+                .path("/")
                 .maxAge(0)          // Al ponerlo en 0, el navegador la elimina inmediatamente
                 .httpOnly(true)
-                .secure(false)      // Ponlo en true en producción con HTTPS
-                .sameSite("Strict")
+                .secure(true)      // Ponlo en true en producción con HTTPS
+                .sameSite("None")
                 .build();
 
         // 3. Respondemos con la cabecera Set-Cookie para limpiar el navegador
