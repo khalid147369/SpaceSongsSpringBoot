@@ -69,8 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
         	CloudinaryResponse imageResponse = cloudinaryService.uploadFile(requestDTO.getImageFile(), "categorias");
         	category.setImageUrl(imageResponse.getUrl());
 		}
-        
-        category.onUpdate();
+
         Category updatedCategory = categoryRepository.save(category);
         return categoryMapper.toResponse(updatedCategory);
     }
