@@ -1,5 +1,6 @@
 package com.example.spctn.Security;
 
+import org.springframework.security.config.Customizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,7 +45,7 @@ public class SecurityConfig {
             throws Exception {
 
         http
-
+        		.cors(Customizer.withDefaults()) 
                 .csrf(csrf -> csrf.disable())
                 
 	                .sessionManagement(session ->
