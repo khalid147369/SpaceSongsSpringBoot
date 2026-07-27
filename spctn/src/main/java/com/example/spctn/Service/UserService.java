@@ -9,7 +9,7 @@ public interface UserService {
 
 	    List<User> findAll();
 
-	    User findById(Long id);
+	    User findById();
 
 	    User save(User user);
 
@@ -20,6 +20,8 @@ public interface UserService {
 		 public User findByEmail(String email);
 	    
 	    User getAuthenticatedUser();
+
+		
 	
 	
 }

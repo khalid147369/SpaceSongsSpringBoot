@@ -45,7 +45,7 @@ public class SavedSongMapper {
 
     	SavedSong guardado = new SavedSong();
     	Long userId = userService.getAuthenticatedUser().getId();
-        guardado.setUser(userService.findById(userId));
+        guardado.setUser(userService.findById());
         guardado.setSong(songService.findById(songId));
         guardado.setFecha(OffsetDateTime.now());
         

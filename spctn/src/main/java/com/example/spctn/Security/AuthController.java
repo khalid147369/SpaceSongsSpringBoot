@@ -70,8 +70,8 @@ public class AuthController {
                 .path("/")     // Solo se envía a las rutas de autenticación
                 .maxAge(7 * 24 * 60 * 60) // 7 días de duración
                 .httpOnly(true)        // JavaScript no puede leerla
-                .secure(false)         // Cámbialo a true cuando uses HTTPS en producción
-                .sameSite("Lax")
+                .secure(true)         // Cámbialo a true cuando uses HTTPS en producción
+                .sameSite("None")
                 .build();
         
 
