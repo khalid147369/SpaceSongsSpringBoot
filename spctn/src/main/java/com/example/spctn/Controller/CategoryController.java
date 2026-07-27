@@ -39,10 +39,10 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.create(requestDTO), HttpStatus.CREATED);
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CategoryResponseDTO> updateCategory(
             @PathVariable Long id, 
-            @RequestBody CategoryRequestDTO requestDTO) throws IOException {
+            @ModelAttribute CategoryRequestDTO requestDTO) throws IOException {
         return ResponseEntity.ok(categoryService.update(id, requestDTO));
     }
     @PreAuthorize("hasRole('ADMIN')")
