@@ -20,7 +20,7 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-
+        config.setAllowCredentials(true);
         // 1. Asigna los orígenes leídos desde application.properties
         config.setAllowedOrigins(allowedOrigins);
 
