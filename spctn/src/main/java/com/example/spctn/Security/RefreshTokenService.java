@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import com.example.spctn.Dto.Response.LoginResponseDTO;
 import com.example.spctn.Entity.RefreshToken;
 import com.example.spctn.Exeption.ResourceNotFoundException;
+import com.example.spctn.Exeption.UnauthorizedException;
 import com.example.spctn.Repository.RefreshTokenRepository;
 import com.example.spctn.Repository.UserRepository;
 
@@ -55,7 +56,7 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new RuntimeException("Refresh token expired. Please sign in again.");
+            throw new UnauthorizedException("Refresh token expired. Please sign in again.");
         }
         return token;
     }

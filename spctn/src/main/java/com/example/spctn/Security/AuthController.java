@@ -3,6 +3,7 @@ package com.example.spctn.Security;
 
 import com.example.spctn.Dto.Request.LoginRequestDTO;
 import com.example.spctn.Dto.Response.LoginResponseDTO;
+import com.example.spctn.Exeption.UnauthorizedException;
 import com.example.spctn.Service.UserService;
 
 import jakarta.validation.Valid;
@@ -87,7 +88,7 @@ public class AuthController {
             @CookieValue(name = "refreshToken", required = false) String requestRefreshToken) {
         
         if (requestRefreshToken == null || requestRefreshToken.isEmpty()) {
-            throw new RuntimeException("Refresh Token is missing in cookies!");
+            throw new UnauthorizedException("Refresh Token is missing in cookies!");
         }
         String newAccessToken = refreshTokenService.refreshAccessToken(requestRefreshToken);
         return  ResponseEntity.ok(new LoginResponseDTO(newAccessToken));
