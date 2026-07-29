@@ -17,7 +17,7 @@ public class GeminiService {
 
     @Value("${gemini.api.key}")
     private String apiKey;
-    @Value("${gimini.api.url}")
+    @Value("${gemini.api.url}")
     private String apiUrl;
     
 
