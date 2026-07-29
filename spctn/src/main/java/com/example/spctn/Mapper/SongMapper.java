@@ -59,6 +59,7 @@ public class SongMapper {
 
 
         song.setTitulo(dto.getTitle());
+        song.setCartoon(dto.getCartoon());
         song.setFechaCreacion(OffsetDateTime.now());
 
 

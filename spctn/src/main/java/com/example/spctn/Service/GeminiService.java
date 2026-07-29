@@ -38,7 +38,7 @@ public class GeminiService {
             
             Responde ÚNICAMENTE con un objeto JSON válido con las siguientes 4 claves exactas:
             {
-              "aboutStory": "Un texto narrativo MUY breve (máximo 2 frases cortas, menos de 220 caracteres en total) sobre la historia detrás de la canción y de la serie de la canción, en árabe.",
+              "aboutStory": "Un texto narrativo MUY breve (máximo 2 frases cortas, menos de 220 caracteres en total) la serie de la canción, en árabe.",
               "trivia": "Un dato curioso o anécdota interesante sobre la canción en árabe.",
               "description": "una descripción breve de qué recuerdos trae esta canción o qué significa para la generación que la vió y escuchó (en árabe)",
               "language": "Idioma principal de la canción perioreza la categoría dada para determinar el idioma (en inglés)",
