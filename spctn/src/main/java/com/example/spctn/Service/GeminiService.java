@@ -46,7 +46,7 @@ public class GeminiService {
                   "aboutStory": "Un texto narrativo MUY breve (máximo 2 frases cortas, menos de 220 caracteres en total) sobre la serie '%s' a la que pertenece esta canción, en árabe.",
                   "trivia": "Un dato curioso o anécdota interesante sobre la canción en árabe.",
                   "description": "una descripción breve de qué recuerdos trae esta canción o qué significa para la generación que la vio y escuchó (en árabe)",
-                  "language": "Idioma principal de la canción, priorizando la categoría dada para determinar el idioma (en inglés)",
+                  "language": "Idioma principal de la canción, priorizando la categoría dada para determinar el idioma si es de una canal árabe ponle árabe (en inglés)",
                   "year": "año de emisión de la serie '%s' (numero entero)"
                 }
                 """, songTitle, categoryName, tvSeries, tvSeries, tvSeries);

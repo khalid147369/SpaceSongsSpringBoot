@@ -2,7 +2,7 @@ package com.example.spctn.Repository;
 import com.example.spctn.Entity.Listen;
 import com.example.spctn.Entity.Song;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -20,5 +20,5 @@ public interface ListenRepository extends JpaRepository<Listen, Long> {
         GROUP BY l.song 
         ORDER BY COUNT(l.id) DESC
     """)
-    List<Song> findTrendingSongsSince(@Param("desde") LocalDateTime desde, Pageable pageable);
+    List<Song> findTrendingSongsSince(@Param("desde") OffsetDateTime desde, Pageable pageable);
 }
