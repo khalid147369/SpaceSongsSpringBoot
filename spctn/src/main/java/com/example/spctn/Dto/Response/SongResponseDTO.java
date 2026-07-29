@@ -21,6 +21,9 @@ public class SongResponseDTO {
     private Boolean isNew;
     private Long creador;
     private String status;
+    private String trivia;
+    private String aboutStory;
+    private String language;
 
 
 }

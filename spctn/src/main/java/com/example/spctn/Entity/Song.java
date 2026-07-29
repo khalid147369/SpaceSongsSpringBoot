@@ -49,6 +49,12 @@ public class Song {
     private Integer anoEmision;
     
     private OffsetDateTime fechaCreacion;
+    
+    private String aboutStory;
+    
+    private String trivia;
+
+    private String language;
 
  // Método que calcula si la canción tiene menos de 14 días de lanzada
     public boolean getIsNew() {

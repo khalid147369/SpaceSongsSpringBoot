@@ -24,8 +24,7 @@ public class SongMapper {
 
         dto.setId(song.getId());
         dto.setTitle(song.getTitulo());
-        dto.setAudioUrl(song.getUrl());
-        dto.setCartoon(song.getCartoon());
+        dto.setAudioUrl(song.getUrl());      
         dto.setCover(song.getImagen());
         dto.setDuration(song.getDuracion());
         dto.setYear(song.getAnoEmision());
@@ -35,6 +34,10 @@ public class SongMapper {
         dto.setIsNew(song.getIsNew());
         dto.setCategory(song.getCategory().getId());
         dto.setCreador(song.getCreador());
+        dto.setTrivia(song.getTrivia());
+        dto.setLanguage(song.getLanguage());
+        dto.setAboutStory(song.getAboutStory());
+        dto.setCartoon(song.getCartoon());
         
         // quita las condiciones después 
         if (song.getEstado()!= null) {
@@ -56,9 +59,6 @@ public class SongMapper {
 
 
         song.setTitulo(dto.getTitle());
-        song.setAnoEmision(dto.getReleseYear());
-        song.setCartoon(dto.getCartoon());
-        song.setDescripcion(dto.getDescription());
         song.setFechaCreacion(OffsetDateTime.now());
 
 

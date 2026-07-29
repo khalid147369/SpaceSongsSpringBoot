@@ -7,24 +7,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
-import com.example.spctn.Dto.Response.CloudinaryResponse;
+
 import com.example.spctn.Dto.Response.LikeResponseDTO;
+import com.example.spctn.Dto.Response.SongDetailsDTO;
 import com.example.spctn.Dto.Response.SongResponseDTO;
-import com.example.spctn.Entity.Like;
+
 import com.example.spctn.Entity.Song;
 import com.example.spctn.Mapper.LikeMapper;
 import com.example.spctn.Mapper.SongMapper;
+import com.example.spctn.Service.GeminiService;
+
 import com.example.spctn.Service.SongService;
 import com.example.spctn.Service.UserService;
-import com.example.spctn.Service.Impl.CloudinaryService;
+
 
 import jakarta.validation.Valid;
 @RestController
@@ -35,12 +38,14 @@ public class SongController {
     private final SongMapper mapper;
     private final LikeMapper likeMapper;
     private final UserService userService;
+    private final GeminiService geminiService;
 
-    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,UserService userService) {
+    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,UserService userService,GeminiService geminiService) {
         this.service = service;
         this.mapper = mapper;
         this.likeMapper = likeMapper;
         this.userService = userService;
+        this.geminiService = geminiService;
 
     }
 
@@ -137,7 +142,8 @@ public class SongController {
     
     @GetMapping("/test-version")
     public ResponseEntity<String> testVersion() {
-        return ResponseEntity.ok("SERVIDOR ACTUALIZADO - VERSION 999 - FECHA Y HORA koko: " + java.time.LocalDateTime.now());
+    	
+        return ResponseEntity.ok("test");
     }
     
     @GetMapping("/trending")

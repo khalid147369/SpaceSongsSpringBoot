@@ -3,6 +3,7 @@ package com.example.spctn.Service.Impl;
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
 import com.example.spctn.Dto.Response.CloudinaryResponse;
+import com.example.spctn.Dto.Response.SongDetailsDTO;
 import com.example.spctn.Entity.Category;
 import com.example.spctn.Entity.Like;
 import com.example.spctn.Entity.Song;
@@ -14,6 +15,7 @@ import com.example.spctn.Repository.CategoryRepository;
 import com.example.spctn.Repository.LikeRepository;
 import com.example.spctn.Repository.ListenRepository;
 import com.example.spctn.Repository.SongRepository;
+import com.example.spctn.Service.GeminiService;
 import com.example.spctn.Service.SongService;
 
 import org.springframework.data.domain.Page;
@@ -36,9 +38,10 @@ public class SongServiceImpl implements SongService {
     private final ListenRepository listenRepository;
     private final UserServiceImpl userService;
     private final CloudinaryService cloudinaryService;
+    private final GeminiService geminiService;
     private final SongMapper mapper;
 
-    public SongServiceImpl(SongRepository repository,LikeRepository likeRepository,ListenRepository listenRepository,CloudinaryService cloudinaryService,UserServiceImpl userService,SongMapper mapper,CategoryRepository categoryRepository) {
+    public SongServiceImpl(SongRepository repository,LikeRepository likeRepository,ListenRepository listenRepository,CloudinaryService cloudinaryService,UserServiceImpl userService,SongMapper mapper,CategoryRepository categoryRepository,GeminiService geminiService) {
         this.repository = repository;
         this.likeRepository = likeRepository;
         this.listenRepository = listenRepository;
@@ -46,6 +49,7 @@ public class SongServiceImpl implements SongService {
         this.userService = userService;
         this.categoryRepository = categoryRepository;
         this.mapper = mapper;
+        this.geminiService=geminiService;
     }
 
     public Page<Song> findAll(String title,Long category,Pageable pageable) {
@@ -163,6 +167,15 @@ public class SongServiceImpl implements SongService {
     	sngToSave.setImagen(urlImagen);
     	sngToSave.setUrl(urlAudio);
     	sngToSave.setDuracion(duracion);
+    	
+    	//Ai genaration
+    	SongDetailsDTO datos = geminiService.generateFullSongDetails(sngToSave.getTitulo(), sngToSave.getCategory().getNombre(),sngToSave.getCartoon());
+    	
+    	sngToSave.setTrivia(datos.trivia());
+    	sngToSave.setAboutStory(datos.aboutStory());
+    	sngToSave.setDescripcion(datos.description());
+    	sngToSave.setLanguage(datos.language());
+    	sngToSave.setAnoEmision(datos.year());
       
         return repository.save(sngToSave);
         
