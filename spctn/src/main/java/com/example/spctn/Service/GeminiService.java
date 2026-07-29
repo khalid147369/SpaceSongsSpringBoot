@@ -15,8 +15,7 @@ public class GeminiService {
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
-    @Value("${gemini.api.key}")
-    private String apiKey;
+
     @Value("${gemini.api.url}")
     private String apiUrl;
     
@@ -28,7 +27,7 @@ public class GeminiService {
 
     public SongDetailsDTO generateFullSongDetails(String songTitle, String categoryName,String tvSeries) {
         // Endpoint completo y actualizado de Google Gemini
-    	String url =  apiUrl + apiKey;
+    	String url =  apiUrl;
         String prompt = String.format("""
             Genera información detallada sobre la canción o tema musical '%s' del artista/proyecto/tvSeriesName '%s'.
             
