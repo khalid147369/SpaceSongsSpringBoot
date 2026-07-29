@@ -29,22 +29,27 @@ public class GeminiService {
         // Endpoint completo y actualizado de Google Gemini
     	String url =  apiUrl;
         String prompt = String.format("""
-            Genera información detallada sobre la canción o tema musical '%s' del artista/proyecto/tvSeriesName '%s'.
-            
-            REGLAS DE FORMATO OBLIGATORIAS:
-            1. Responde ÚNICAMENTE con un JSON válido.
-            2. NO utilices comillas dobles (") dentro de los textos. Si necesitas citar algo, usa comillas simples (').
-            3. NO incluyas saltos de línea dentro de las cadenas de texto.
-            
-            Responde ÚNICAMENTE con un objeto JSON válido con las siguientes 4 claves exactas:
-            {
-              "aboutStory": "Un texto narrativo MUY breve (máximo 2 frases cortas, menos de 220 caracteres en total) la serie de la canción, en árabe.",
-              "trivia": "Un dato curioso o anécdota interesante sobre la canción en árabe.",
-              "description": "una descripción breve de qué recuerdos trae esta canción o qué significa para la generación que la vió y escuchó (en árabe)",
-              "language": "Idioma principal de la canción perioreza la categoría dada para determinar el idioma (en inglés)",
-              "year": "año de emisión de la serie (numero entero)"
-            }
-            """, songTitle, categoryName,tvSeries);
+                Genera información detallada sobre la canción o tema musical.
+
+                Datos de entrada:
+                - Título de la canción: '%s'
+                - Categoría/género: '%s'
+                - Serie o proyecto de TV al que pertenece: '%s'
+
+                REGLAS DE FORMATO OBLIGATORIAS:
+                1. Responde ÚNICAMENTE con un JSON válido.
+                2. NO utilices comillas dobles (") dentro de los textos. Si necesitas citar algo, usa comillas simples (').
+                3. NO incluyas saltos de línea dentro de las cadenas de texto.
+
+                Responde ÚNICAMENTE con un objeto JSON válido con las siguientes 5 claves exactas:
+                {
+                  "aboutStory": "Un texto narrativo MUY breve (máximo 2 frases cortas, menos de 220 caracteres en total) sobre la serie '%s' a la que pertenece esta canción, en árabe.",
+                  "trivia": "Un dato curioso o anécdota interesante sobre la canción en árabe.",
+                  "description": "una descripción breve de qué recuerdos trae esta canción o qué significa para la generación que la vio y escuchó (en árabe)",
+                  "language": "Idioma principal de la canción, priorizando la categoría dada para determinar el idioma (en inglés)",
+                  "year": "año de emisión de la serie '%s' (numero entero)"
+                }
+                """, songTitle, categoryName, tvSeries, tvSeries, tvSeries);
 
         Map<String, Object> requestBody = Map.of(
             "contents", List.of(
