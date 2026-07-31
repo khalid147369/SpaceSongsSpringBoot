@@ -14,7 +14,6 @@ import org.springframework.data.repository.query.Param;
 public interface ListenRepository extends JpaRepository<Listen, Long> {
 	long countBySongId(Long songId);
 	// Devuelve las entidades Song directamente ordenadas por las más escuchadas desde una fecha
-	@EntityGraph(attributePaths = {"category"})
 	@Query("""
         SELECT l.song 
         FROM Listen l 
