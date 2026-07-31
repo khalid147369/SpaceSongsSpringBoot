@@ -55,6 +55,8 @@ public class Song {
     private String trivia;
 
     private String language;
+    
+    private boolean isNew;
 
  // Método que calcula si la canción tiene menos de 14 días de lanzada
     public boolean getIsNew() {
@@ -62,8 +64,10 @@ public class Song {
         
         // Define tu regla: por ejemplo, 14 días
         OffsetDateTime limitDate = OffsetDateTime.now().minusDays(3);
+        boolean isAfter = this.fechaCreacion.isAfter(limitDate);
         
-        return this.fechaCreacion.isAfter(limitDate);
+        this.isNew=isAfter;
+        return isAfter ;
     }
     
     @OneToMany(mappedBy = "song")

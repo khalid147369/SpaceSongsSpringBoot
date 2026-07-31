@@ -18,11 +18,13 @@ public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository repository;
     private final SongServiceImpl songService;
+    private final UserServiceImpl userService;
 
 
-    public LikeServiceImpl(LikeRepository repository,SongServiceImpl songService) {
+    public LikeServiceImpl(LikeRepository repository,SongServiceImpl songService,UserServiceImpl userService) {
         this.repository = repository;
         this.songService = songService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -55,9 +57,14 @@ public class LikeServiceImpl implements LikeService {
     	if (id==null) {
 			throw new BadRequestException("Id must not be null");
 		}
-    	Like like = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No like found"));
-    	songService.decrementarLikes(like.getSong().getId());
-        repository.deleteById(id);
+    	Long userId = userService.getAuthenticatedUser().getId();
+    	Boolean likeExists = repository.existsByUserIdAndSongId(userId,id);
+    	
+    	if (!likeExists) {
+			throw new ResourceNotFoundException("Like not found");
+		}
+    	songService.decrementarLikes(id);
+        repository.deleteByUserIdAndSongId(userId,id);
     }
     
     @Override

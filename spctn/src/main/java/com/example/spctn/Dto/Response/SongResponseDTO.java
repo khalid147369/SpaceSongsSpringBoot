@@ -11,7 +11,7 @@ public class SongResponseDTO {
     private String title;
     private String audioUrl;
     private String cover;
-    private Long category;
+    private String category;
     private String cartoon;
     private Long likes;
     private Long listens;

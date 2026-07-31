@@ -32,7 +32,7 @@ public class SongMapper {
         dto.setLikes(song.getNumlikes());
         dto.setDescription(song.getDescripcion());
         dto.setIsNew(song.getIsNew());
-        dto.setCategory(song.getCategory().getId());
+        dto.setCategory(song.getCategory().getNombre());
         dto.setCreador(song.getCreador());
         dto.setTrivia(song.getTrivia());
         dto.setLanguage(song.getLanguage());
