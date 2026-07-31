@@ -20,6 +20,8 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 	List<Song> findByCategoryId(Long CategoryId);
 	
 	@EntityGraph(attributePaths = {"category"})
+	Page<Song> findAll(Pageable pageable);
+	
 	boolean existsByTitulo(String titulo);
 	
 	@EntityGraph(attributePaths = {"category"})
