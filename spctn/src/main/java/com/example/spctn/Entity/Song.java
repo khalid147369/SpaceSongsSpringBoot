@@ -32,7 +32,7 @@ public class Song {
     @Enumerated(EnumType.STRING)
     private SongStatus estado=SongStatus.DRAFT;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
     

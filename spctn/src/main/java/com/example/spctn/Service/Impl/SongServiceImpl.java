@@ -32,7 +32,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 public class SongServiceImpl implements SongService {
 
     private final SongRepository repository;

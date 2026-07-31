@@ -13,20 +13,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface SongRepository extends JpaRepository<Song, Long> {
-	@EntityGraph(attributePaths = {"category"})
+	
 	Optional<Song> findByTitulo(String titulo);
 	
-	@EntityGraph(attributePaths = {"category"})
+	Optional<Song> findById(Long id);
+	
 	List<Song> findByCategoryId(Long CategoryId);
 	
-	@EntityGraph(attributePaths = {"category"})
 	Page<Song> findAll(Pageable pageable);
 	
 	boolean existsByTitulo(String titulo);
 	
-	@EntityGraph(attributePaths = {"category"})
 	Page<Song> findByTituloContainingIgnoreCase(String titulo, Pageable pageable);
 	
-	@EntityGraph(attributePaths = {"category"})
 	Page<Song> findByCategoryId(Long categoryId, Pageable pageable);
 }
