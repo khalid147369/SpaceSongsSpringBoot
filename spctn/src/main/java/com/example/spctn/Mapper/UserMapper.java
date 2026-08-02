@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.spctn.Dto.Request.UserRequestDTO;
 import com.example.spctn.Dto.Response.*;
+import com.example.spctn.Entity.Role;
 import com.example.spctn.Entity.User;
 
 @Component
@@ -19,6 +20,10 @@ public class UserMapper {
         dto.setNombre(user.getNombre());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole().name());
+        dto.setFotoPerfil(user.getFotoPerfil());
+        dto.setDescreption(user.getDescription());
+        dto.setCategoryName(user.getFavoriteCategory().getNombre());
+        
 
 
         return dto;
@@ -28,9 +33,11 @@ public class UserMapper {
 
         User user = new User();
 
+        user.setRole(Role.USER);
         user.setNombre(dto.getNombre());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
+        user.setDescription(dto.getDescreption());
 
         return user;
     }

@@ -10,16 +10,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequestDTO {
+public class UserUpdateRequestDTO {
 
-	@NotBlank
 	@Size(max = 20, message = "The name must not exceed 20 characters")
     private String nombre;
 	@Email
-	@NotBlank
     private String email;
 	
-	@NotBlank(message = "The password is required")
 	@Size(min = 6, message = "The password must contain at least 6 characters")
     private String password;
 	

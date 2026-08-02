@@ -14,7 +14,4 @@ public class CommentRequestDTO {
 	@Size(max = 100, message = "The text must not  exceed 100 characters")
     private String text;
 
-	@NotNull
-    private Long songId;
-
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import com.example.spctn.Dto.Response.LikeResponseDTO;
+import com.example.spctn.Dto.Response.SongResponseDTO;
 import com.example.spctn.Entity.Like;
 
 import com.example.spctn.Mapper.LikeMapper;
@@ -41,6 +42,12 @@ public class LikeController {
     	Like lk = service.save(mapper.toEntity(songId));
     	LikeResponseDTO likeResponse = mapper.toResponse(lk); 
         return ResponseEntity.status(HttpStatus.CREATED).body(likeResponse);
+    }
+    
+    @GetMapping("/lastLikedSong")
+    public ResponseEntity<SongResponseDTO> lastLikedSong(){
+    	SongResponseDTO song = service.findLastLikedSong();
+        return ResponseEntity.ok(song);
     }
 
     /**

@@ -3,6 +3,11 @@ package com.example.spctn.Controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +43,13 @@ public class CommentController {
     	
     	return ResponseEntity.ok(comments.stream().map(mapper::toResponse).toList());
     }
+    
+    @GetMapping("/userComments")
+    public ResponseEntity<Page<CommentResponseDTO>>  findUserComments(   @PageableDefault(page = 0, size = 3) Pageable pageable ) {
+    	Page<CommentResponseDTO> comments = service.getUserComments(pageable);
+    	
+    	return ResponseEntity.ok(comments);
+    }
 
 
     /**
@@ -45,10 +57,10 @@ public class CommentController {
      * @param comentario
      * @return
      */
-    @PostMapping
-    public ResponseEntity<CommentResponseDTO> save(@Valid @RequestBody CommentRequestDTO comentario) {
+    @PostMapping("/{songId}")
+    public ResponseEntity<CommentResponseDTO> save(@PathVariable Long songId ,@Valid @RequestBody CommentRequestDTO comentario) {
     	
-    	 Comment comment = service.save(mapper.toEntity(comentario));
+    	 Comment comment = service.save(mapper.toEntity(comentario,songId));
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(comment));
     }
     /**
@@ -59,7 +71,7 @@ public class CommentController {
     @PutMapping("/{id}")
     public ResponseEntity<CommentResponseDTO> update(@PathVariable Long id,@Valid  @RequestBody CommentRequestDTO comentario) {
     	
-    	 Comment comment = service.update(id,mapper.toEntity(comentario));
+    	 Comment comment = service.update(mapper.toEntity(comentario,id));
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(comment));
     }
     

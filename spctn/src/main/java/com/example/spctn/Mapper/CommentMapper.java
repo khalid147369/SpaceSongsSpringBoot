@@ -33,16 +33,18 @@ public class CommentMapper {
         dto.setText(comentario.getTexto());
         dto.setDate(comentario.getFecha());
         dto.setCreator(comentario.getUser().getNombre());
+        dto.setSongName(comentario.getSong().getTitulo());
         dto.setUserId(comentario.getUser().getId());
         dto.setSongId(comentario.getSong().getId());
+        dto.setAvatar(comentario.getUser().getFotoPerfil());
 
         return dto;
     }
 
-    public Comment toEntity(CommentRequestDTO dto) {
+    public Comment toEntity(CommentRequestDTO dto,Long songId) {
 
     	User user = userService.getAuthenticatedUser();
-    	Song song = songService.findById(dto.getSongId());
+    	Song song = songService.findById(songId);
     	
     	Comment comentario = new Comment();
 

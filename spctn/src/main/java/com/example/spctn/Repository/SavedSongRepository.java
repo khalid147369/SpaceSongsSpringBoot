@@ -11,6 +11,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SavedSongRepository extends JpaRepository<SavedSong, Long> {
 	List<SavedSong> findByUserId(Long userId);
 	
+	long countBySongId(Long songId);
+	
+	long countByUserId(Long userId);
+	
 	boolean existsByUserIdAndSongId(Long userId,Long songId);
 	Optional<SavedSong> findByUserIdAndSongId(Long userId,Long songId);
 }

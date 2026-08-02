@@ -5,6 +5,7 @@ import com.example.spctn.Entity.Song;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface ListenRepository extends JpaRepository<Listen, Long> {
 	long countBySongId(Long songId);
+	
+	@Query("SELECT DISTINCT l.song FROM Listen l WHERE l.user.id = :userId")
+    Page<Song> findByUserId(@Param("userId") Long userId, Pageable pageable);
 	// Devuelve las entidades Song directamente ordenadas por las más escuchadas desde una fecha
 	@Query("""
         SELECT l.song 
@@ -21,5 +25,5 @@ public interface ListenRepository extends JpaRepository<Listen, Long> {
         GROUP BY l.song 
         ORDER BY COUNT(l.id) DESC
     """)
-    List<Song> findTrendingSongsSince(@Param("desde") OffsetDateTime desde, Pageable pageable);
+    Page<Song> findTrendingSongsSince(@Param("desde") OffsetDateTime desde, Pageable pageable);
 }

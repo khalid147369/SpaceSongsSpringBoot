@@ -3,6 +3,7 @@ package com.example.spctn.Controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -13,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-
+import com.example.spctn.Dto.Request.SearchSongRequestDTO;
 import com.example.spctn.Dto.Request.SongRequestDTO;
 
 import com.example.spctn.Dto.Response.LikeResponseDTO;
@@ -27,7 +28,7 @@ import com.example.spctn.Service.GeminiService;
 
 import com.example.spctn.Service.SongService;
 import com.example.spctn.Service.UserService;
-
+import com.example.spctn.Service.Impl.MetricServiceImpl;
 
 import jakarta.validation.Valid;
 @RestController
@@ -39,13 +40,15 @@ public class SongController {
     private final LikeMapper likeMapper;
     private final UserService userService;
     private final GeminiService geminiService;
+    private final MetricServiceImpl metricServiceImpl;
 
-    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,UserService userService,GeminiService geminiService) {
+    public SongController(SongService service,SongMapper mapper,LikeMapper likeMapper,UserService userService,GeminiService geminiService,MetricServiceImpl metricServiceImpl) {
         this.service = service;
         this.mapper = mapper;
         this.likeMapper = likeMapper;
         this.userService = userService;
         this.geminiService = geminiService;
+        this.metricServiceImpl = metricServiceImpl;
 
     }
 
@@ -54,12 +57,12 @@ public class SongController {
      * @return
      */
     @GetMapping("/getAll")
-    public ResponseEntity<List<SongResponseDTO>> findAll(
+    public ResponseEntity<Page<SongResponseDTO>> findAll(
     		@RequestParam(required = false) String titulo,
     		@RequestParam(required = false) Long category,
     		@RequestParam(required = false) String numEscuchas,
             @PageableDefault(page = 0, size = 20, sort = "titulo", direction = Sort.Direction.ASC) Pageable pageable) {
-    	List<SongResponseDTO> songs =service.findAll(titulo,category,pageable).stream().map(mapper::toResponse).toList();
+    	Page<SongResponseDTO> songs =service.findAll(titulo,category,pageable).map(mapper::toResponse);
         return ResponseEntity.ok(songs) ;
     }
 
@@ -71,6 +74,8 @@ public class SongController {
     @GetMapping("/getSingle/{id}")
     public ResponseEntity<SongResponseDTO> findById(@PathVariable Long id) {
     	SongResponseDTO song = mapper.toResponse(service.findById(id));
+    	song.setTotalComments(metricServiceImpl.countTotalCommentsBySong(id));
+    	song.setTotalSaves(metricServiceImpl.countTotalSavedSongsBySong(id));
         return ResponseEntity.ok(song);
     }
     
@@ -117,14 +122,15 @@ public class SongController {
      * @param id
      * @param song
      * @return
+     * @throws IOException 
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<SongResponseDTO>  update(@PathVariable Long id,@Valid @RequestBody SongRequestDTO song) {
+    public ResponseEntity<SongResponseDTO>  update(@PathVariable Long id,@Valid @ModelAttribute SongRequestDTO song) throws IOException {
     	
-    	Song sng = mapper.toEntity(song);
     	
-    	SongResponseDTO songdto = mapper.toResponse(service.update(id, sng));
+    	
+    	SongResponseDTO songdto =service.update(id, song);
         return ResponseEntity.ok(songdto);
     }
 
@@ -132,10 +138,11 @@ public class SongController {
      * Borrar una canción por su identificador
      * @param id
      * @return
+     * @throws IOException 
      */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public  ResponseEntity<?> delete(@PathVariable Long id) {
+    public  ResponseEntity<?> delete(@PathVariable Long id) throws IOException {
         service.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -147,14 +154,25 @@ public class SongController {
     }
     
     @GetMapping("/trending")
-    public ResponseEntity<List<SongResponseDTO>> getTrendingThisWeek(
+    public ResponseEntity<Page<SongResponseDTO>> getTrendingThisWeek(
             @RequestParam(defaultValue = "10") int limit) {
 
-        List<SongResponseDTO> trendingSongs = service.getTrendingThisWeek(limit)
-                .stream()
-                .map(mapper::toResponse)
-                .toList();
+        Page<SongResponseDTO> trendingSongs = service.getTrendingThisWeek(limit)
+
+                .map(mapper::toResponse);
 
         return ResponseEntity.ok(trendingSongs);
+    }
+    
+    @GetMapping("/search")
+    public ResponseEntity<Page<SongResponseDTO>> findWithFilters(
+            SearchSongRequestDTO filter, // 👈 SIN @RequestBody (Spring mapea los Query Params automáticamente)
+            @PageableDefault(page = 0, size = 10, sort = "titulo", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Page<SongResponseDTO> encountredSongs = service.findWithFilters(filter.getTitle(),filter.getCartoon(),filter.getCategory(),pageable)
+
+                .map(mapper::toResponse);
+
+        return ResponseEntity.ok(encountredSongs);
     }
 }

@@ -1,17 +1,28 @@
 package com.example.spctn.Controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.spctn.Dto.Request.UserRequestDTO;
+import com.example.spctn.Dto.Request.UserUpdateRequestDTO;
+import com.example.spctn.Dto.Response.SongResponseDTO;
 import com.example.spctn.Dto.Response.UserResponseDTO;
+import com.example.spctn.Entity.Category;
 import com.example.spctn.Entity.User;
+import com.example.spctn.Mapper.SongMapper;
 import com.example.spctn.Mapper.UserMapper;
+import com.example.spctn.Service.CategoryService;
 import com.example.spctn.Service.UserService;
+import com.example.spctn.Service.Impl.MetricServiceImpl;
 
 import jakarta.validation.Valid;
 
@@ -21,10 +32,15 @@ import jakarta.validation.Valid;
 public class UserController {
 
     private final UserService service;
+    private final MetricServiceImpl metricService;
     private final UserMapper mapper;
-    public UserController(UserService service , UserMapper mapper) {
+    private final SongMapper songMapper;
+    public UserController(UserService service , UserMapper mapper,SongMapper songMapper,MetricServiceImpl metricService) {
         this.service = service;
         this.mapper = mapper;
+        this.songMapper = songMapper;
+        this.metricService = metricService;
+
     }
     
    
@@ -38,7 +54,7 @@ public class UserController {
     public ResponseEntity<List<UserResponseDTO>> findAll() {
 
     	List<UserResponseDTO> users = service.findAll().stream().map(mapper::toResponse).toList();
-        return ResponseEntity.ok(users)  ;
+        return ResponseEntity.ok(users);
     }
 
     /**
@@ -49,20 +65,31 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> findMe() {
     	UserResponseDTO us = mapper.toResponse(service.findById());
+    	us.setTotalComments(metricService.countTotalCommentsByUser());
+    	us.setTotalLikes(metricService.countTotalLikesByUser());
+    	us.setTotalSongsSaved(metricService.countTotalSavedSongByUser());
         return ResponseEntity.ok(us);
+    }
+    
+    @GetMapping("/recentlyPlayedSongs")
+    public ResponseEntity<Page<SongResponseDTO>> favoriteSongs(
+    		@PageableDefault(page = 0, size = 20) Pageable pageable) {
+    	Page<SongResponseDTO> songs = service.lastSongPlayed(pageable).map(songMapper::toResponse);
+        return ResponseEntity.ok(songs);
     }
 
     /**
      * Registrar un usuario
      * @param user
      * @return
+     * @throws IOException 
      */
-    @PostMapping("/auth/register")
-    public ResponseEntity<UserResponseDTO>  save(@Valid @RequestBody UserRequestDTO user) {
+    @PostMapping(value="/auth/register",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserResponseDTO>  save(@Valid @ModelAttribute UserRequestDTO user) throws IOException {
     	
-			User us = service.save(mapper.toEntity(user));
+    	UserResponseDTO us = service.save(user);
     	
-			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(us));
+			return ResponseEntity.status(HttpStatus.CREATED).body(us);
 	
     	
     }
@@ -72,11 +99,14 @@ public class UserController {
      * @param id
      * @param user
      * @return
+     * @throws IOException 
      */
     @PutMapping
-    public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserRequestDTO user) {
+    public ResponseEntity<UserResponseDTO> update(@Valid @ModelAttribute UserUpdateRequestDTO user) throws IOException {
 
-			UserResponseDTO us = mapper.toResponse(service.update(mapper.toEntity(user)));
+
+			UserResponseDTO us = mapper.toResponse(service.update(user));
+			
 			return ResponseEntity.ok(us);
 	
        

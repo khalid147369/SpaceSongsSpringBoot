@@ -1,14 +1,18 @@
 package com.example.spctn.Service.Impl;
 
+import com.example.spctn.Dto.Response.CommentResponseDTO;
 import com.example.spctn.Entity.Comment;
 import com.example.spctn.Entity.Song;
 import com.example.spctn.Entity.User;
 import com.example.spctn.Exeption.BadRequestException;
 import com.example.spctn.Exeption.ForbiddenException;
 import com.example.spctn.Exeption.ResourceNotFoundException;
+import com.example.spctn.Mapper.CommentMapper;
 import com.example.spctn.Repository.CommentRepository;
 import com.example.spctn.Service.ComentarioService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +21,13 @@ import java.util.List;
 public class ComentarioServiceImpl implements ComentarioService {
 
     private final CommentRepository repository;
+    private final CommentMapper mapper;
     private final UserServiceImpl userService;
 
-    public ComentarioServiceImpl(CommentRepository repository,UserServiceImpl userService) {
+    public ComentarioServiceImpl(CommentRepository repository,UserServiceImpl userService,CommentMapper mapper) {
         this.repository = repository;
         this.userService = userService;
+        this.mapper = mapper;
     }
 
 
@@ -38,6 +44,14 @@ public class ComentarioServiceImpl implements ComentarioService {
           
     	return comments;
     }
+    
+    @Override
+    public Page<CommentResponseDTO> getUserComments(Pageable pageable) {
+    	
+    	Long userId = userService.getAuthenticatedUser().getId();
+        Page<Comment> commentsPage = repository.findCommentsByUserId(userId, pageable);
+        return commentsPage.map(mapper::toResponse);
+    }
 
     @Override
     public Comment save(Comment comentario) {
@@ -46,13 +60,13 @@ public class ComentarioServiceImpl implements ComentarioService {
     }
 
     @Override
-    public Comment update(Long id, Comment comment) {
+    public Comment update(Comment comment) {
     	
-        if (comment==null || id==null) {
+        if (comment==null || comment.getId()==null) {
         	throw new BadRequestException("Song and id shoud not be null");
 		}
     	
-        Comment cm = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Song not found"));
+        Comment cm = repository.findById(comment.getId()).orElseThrow(()-> new ResourceNotFoundException("Song not found"));
 
     	User user = userService.getAuthenticatedUser();
     	

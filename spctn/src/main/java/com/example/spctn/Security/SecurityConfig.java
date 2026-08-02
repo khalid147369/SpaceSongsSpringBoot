@@ -64,6 +64,7 @@ public class SecurityConfig {
                     		 	"/categories/getAll",
                     		 	"/categories/getById/{id}",
                     		 	"/users/auth/register",
+                    		 	"/songs/search",
                     		 	"/songs/getAll",
                     		 	"/songs/test-version",
                     		 	"/songs/trending",

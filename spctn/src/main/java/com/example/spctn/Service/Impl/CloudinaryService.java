@@ -33,11 +33,23 @@ public class CloudinaryService {
                 "resource_type", "auto" // Detecta automáticamente si es imagen o audio/video
             )
         );
+       
         String url = uploadResult.get("secure_url").toString();
+        String publicId = uploadResult.get("public_id").toString();
         Double duration = uploadResult.get("duration") != null 
                 ? ((Number) uploadResult.get("duration")).doubleValue() 
                         : null;;
         // Retorna la URL segura (HTTPS) para guardar en tu Base de Datos
-        return new CloudinaryResponse(url,duration) ;
+        return new CloudinaryResponse(url,publicId,duration) ;
+    }
+    
+    public void deleteFile(String publicId, String resourceType) throws IOException {
+
+        cloudinary.uploader().destroy(
+            publicId,
+            ObjectUtils.asMap(
+                "resource_type", resourceType
+            )
+        );
     }
 }

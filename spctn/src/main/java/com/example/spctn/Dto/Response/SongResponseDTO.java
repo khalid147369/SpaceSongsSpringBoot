@@ -24,6 +24,9 @@ public class SongResponseDTO {
     private String trivia;
     private String aboutStory;
     private String language;
+    
+    private Long totalSaves;
+    private Long totalComments;
 
 
 }

@@ -1,9 +1,12 @@
 package com.example.spctn.Service.Impl;
 
+import com.example.spctn.Dto.Response.SongResponseDTO;
 import com.example.spctn.Entity.Like;
+import com.example.spctn.Entity.Song;
 import com.example.spctn.Exeption.BadRequestException;
 import com.example.spctn.Exeption.DuplicateResourceException;
 import com.example.spctn.Exeption.ResourceNotFoundException;
+import com.example.spctn.Mapper.SongMapper;
 import com.example.spctn.Repository.LikeRepository;
 import com.example.spctn.Service.LikeService;
 
@@ -19,12 +22,14 @@ public class LikeServiceImpl implements LikeService {
     private final LikeRepository repository;
     private final SongServiceImpl songService;
     private final UserServiceImpl userService;
+    private final SongMapper songMapper;
 
 
-    public LikeServiceImpl(LikeRepository repository,SongServiceImpl songService,UserServiceImpl userService) {
+    public LikeServiceImpl(LikeRepository repository,SongServiceImpl songService,UserServiceImpl userService,SongMapper songMapper) {
         this.repository = repository;
         this.songService = songService;
         this.userService = userService;
+        this.songMapper = songMapper;
     }
 
     @Transactional
@@ -75,6 +80,14 @@ public class LikeServiceImpl implements LikeService {
     	Like like = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("like not found") );
 
     	return like;
+    }
+    
+    @Override
+    public SongResponseDTO findLastLikedSong() {
+    	Long userId = userService.getAuthenticatedUser().getId();
+    	Song song = repository.findLastLikedSongByUserId(userId).orElseThrow(()-> new ResourceNotFoundException("song not found") );
+    	
+    	return songMapper.toResponse(song);
     }
 
 }

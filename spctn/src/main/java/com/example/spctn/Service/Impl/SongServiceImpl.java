@@ -4,6 +4,7 @@ package com.example.spctn.Service.Impl;
 import com.example.spctn.Dto.Request.SongRequestDTO;
 import com.example.spctn.Dto.Response.CloudinaryResponse;
 import com.example.spctn.Dto.Response.SongDetailsDTO;
+import com.example.spctn.Dto.Response.SongResponseDTO;
 import com.example.spctn.Entity.Category;
 import com.example.spctn.Entity.Like;
 import com.example.spctn.Entity.Song;
@@ -153,6 +154,10 @@ public class SongServiceImpl implements SongService {
     	String urlAudio = audioResponse.getUrl();
     	String urlImagen = imageResponse.getUrl();
         Double duracion = audioResponse.getDuration();
+        String audioPublicId = audioResponse.getPublicId();
+        String imagePublicId = imageResponse.getPublicId();
+
+       
 
         Category category = categoryRepository.findById(songDto.getCategory()).orElseThrow(()-> new ResourceNotFoundException("Category not found"));
     	
@@ -169,6 +174,8 @@ public class SongServiceImpl implements SongService {
     	sngToSave.setImagen(urlImagen);
     	sngToSave.setUrl(urlAudio);
     	sngToSave.setDuracion(duracion);
+    	sngToSave.setImagePublicId(imagePublicId);
+    	sngToSave.setAudioPublicId(audioPublicId);
     	
     	//Ai genaration
     	SongDetailsDTO datos = geminiService.generateFullSongDetails(sngToSave.getTitulo(), sngToSave.getCategory().getNombre(),sngToSave.getCartoon());
@@ -183,7 +190,7 @@ public class SongServiceImpl implements SongService {
         
     }
 
-    public Song update(Long id, Song song) {
+    public SongResponseDTO update(Long id, SongRequestDTO song) throws IOException {
     	
         if (song==null || id==null) {
         	throw new BadRequestException("Song and id shoud not be null");
@@ -192,42 +199,92 @@ public class SongServiceImpl implements SongService {
         Song sn = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Song not found"));
         
 
-
         
         
-        if (song.getImagen()!=null) {
-			 sn.setImagen(song.getImagen());
+        
+        if (song.getImageFile()!=null) {
+        	if (sn.getImagePublicId() != null) {
+        	    cloudinaryService.deleteFile(sn.getImagePublicId(),"image");
+        	}
+        	CloudinaryResponse imageResponse = cloudinaryService.uploadFile(song.getImageFile(), "portadas");
+        	String urlImagen = imageResponse.getUrl();
+        	String publicId = imageResponse.getPublicId();
+			 sn.setImagen(urlImagen);
+			 sn.setImagePublicId(publicId);
 		}
         
-        if (song.getTitulo()!=null) {
-			 sn.setTitulo(song.getTitulo());
+        if (song.getAudioFile()!=null) {
+        	if (sn.getAudioPublicId() != null) {
+        	    cloudinaryService.deleteFile(sn.getAudioPublicId(),"video");
+        	}
+        	CloudinaryResponse audioResponse = cloudinaryService.uploadFile(song.getAudioFile(), "canciones");
+        	String urlAudio = audioResponse.getUrl();
+        	String publicId = audioResponse.getPublicId();
+			 sn.setUrl(urlAudio);
+			 sn.setAudioPublicId(publicId);
 		}
         
-        if (song.getUrl()!=null) {
-			 sn.setUrl(song.getUrl());
+        if (song.getTitle()!=null) {
+			 sn.setTitulo(song.getTitle());
 		}
+        
         
         if (song.getCategory()!=null) {
-			 sn.setCategory(song.getCategory());
+        	 Category category = categoryRepository.findById(song.getCategory()).orElseThrow(()-> new ResourceNotFoundException("Category not found"));
+			 sn.setCategory(category);
+		}
+        
+        if (song.getTitle()!=null) {
+			 sn.setTrivia(song.getTrivia());
+		}
+        
+        if (song.getAboutStory()!=null) {
+			 sn.setAboutStory(song.getAboutStory());
+		}
+        
+        if (song.getDescription()!=null) {
+			 sn.setDescripcion(song.getDescription());
+		}
+        
+        if (song.getLanguage()!=null) {
+			 sn.setLanguage(song.getLanguage());
 		}
         
 
-        return repository.save(sn);
+        return mapper.toResponse(repository.save(sn)) ;
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws IOException {
     	if (id==null) {
         	throw new BadRequestException("id shoud not be null");
 		}
+        Song sn = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Song not found"));
+
+    	
+
+         	if (sn.getImagePublicId() != null) {
+         	    cloudinaryService.deleteFile(sn.getImagePublicId(),"image");
+         	}
+         
+         	if (sn.getAudioPublicId() != null) {
+         	    cloudinaryService.deleteFile(sn.getAudioPublicId(),"video");
+         	}
+         	
         repository.deleteById(id);
     }
     
 
-    public List<Song> getTrendingThisWeek(int limit) {
+    public Page<Song> getTrendingThisWeek(int limit) {
     	OffsetDateTime haceUnaSemana = OffsetDateTime.now().minusDays(7);
         Pageable pageable = PageRequest.of(0, limit);
             
         return listenRepository.findTrendingSongsSince(haceUnaSemana, pageable);
     }
+
+	@Override
+	public Page<Song> findWithFilters(String titulo, String cartoon, Long categoryId, Pageable pageable) {
+
+		return repository.findWithFilters(titulo, cartoon, categoryId, pageable);
+	}
     
 }

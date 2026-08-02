@@ -56,6 +56,10 @@ public class Song {
 
     private String language;
     
+    private String imagePublicId;
+    
+    private String audioPublicId;
+    
     private boolean isNew;
 
  // Método que calcula si la canción tiene menos de 14 días de lanzada

@@ -3,6 +3,8 @@ package com.example.spctn.Dto.Request;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.spctn.Enums.SongStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,6 +25,19 @@ public class SongRequestDTO {
 	@NotNull
     private Long category;
 	
+	@NotNull
+	private String description;
+	
+	private SongStatus status;
+	
+	@NotNull
+	private String trivia;
+	
+	@NotNull
+	private String aboutStory;
+	
+	@NotNull
+	private String language;
 	
 	@NotNull
 	private MultipartFile audioFile;

@@ -12,4 +12,10 @@ public class UserResponseDTO {
     private String email;
     private String fotoPerfil;
     private String Role;
+    private String descreption;
+    private String categoryName;
+    
+    private Long totalLikes;
+    private Long totalSongsSaved;
+    private Long totalComments;
 }

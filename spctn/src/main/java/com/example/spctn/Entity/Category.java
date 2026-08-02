@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,8 @@ import java.time.OffsetDateTime;
 @Table(name = "categories")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Category {
 
     @Id
@@ -34,5 +35,9 @@ public class Category {
     @PreUpdate
     public void onUpdate() {
         this.updatedAt = OffsetDateTime.now();
+    }
+    
+    public Category(Long id) {
+        this.id = id;
     }
 }

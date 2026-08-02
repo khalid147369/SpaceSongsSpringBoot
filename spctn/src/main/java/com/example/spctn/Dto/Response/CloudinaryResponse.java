@@ -9,5 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CloudinaryResponse {
 	private String url;
+	private String publicId;
     private Double duration; // Cloudinary lo devuelve en segundos (ej: 214.53)
 }
