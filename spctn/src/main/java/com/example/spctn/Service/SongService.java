@@ -37,9 +37,6 @@ public interface SongService {
 	
 	public Page<Song> getTrendingThisWeek(int limit);
 	
-	Page<Song> findWithFilters(
-	        @Param("titulo") String titulo,
-	        @Param("cartoon") String cartoon,
-	        @Param("categoryId") Long categoryId,
-	        Pageable pageable);
+
+	Page<Song> findWithFilters(String text, Long categoryId, Pageable pageable);
 }

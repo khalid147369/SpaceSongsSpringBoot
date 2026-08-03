@@ -169,7 +169,8 @@ public class SongController {
             SearchSongRequestDTO filter, // 👈 SIN @RequestBody (Spring mapea los Query Params automáticamente)
             @PageableDefault(page = 0, size = 10, sort = "titulo", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<SongResponseDTO> encountredSongs = service.findWithFilters(filter.getTitle(),filter.getCartoon(),filter.getCategory(),pageable)
+
+        Page<SongResponseDTO> encountredSongs = service.findWithFilters(filter.getText(),filter.getCategory(),pageable)
 
                 .map(mapper::toResponse);
 

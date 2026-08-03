@@ -34,13 +34,19 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 	Page<Song> findByCategoryId(Long categoryId, Pageable pageable);
 	
 	
-	@Query("SELECT s FROM Song s WHERE " +
-		       "(:titulo IS NULL OR LOWER(s.titulo) LIKE LOWER(CONCAT('%', :titulo, '%'))) AND " +
-		       "(:cartoon IS NULL OR LOWER(s.cartoon) LIKE LOWER(CONCAT('%', :cartoon, '%'))) AND " +
-		       "(:categoryId IS NULL OR s.category.id = :categoryId)")
-		Page<Song> findWithFilters(
-		        @Param("titulo") String titulo,
-		        @Param("cartoon") String cartoon,
-		        @Param("categoryId") Long categoryId,
-		        Pageable pageable);
+	@Query("""
+			SELECT s
+			FROM Song s
+			WHERE (
+			    (:text IS NULL OR
+			     s.titulo LIKE CONCAT('%', :text, '%') OR
+			     s.cartoon LIKE CONCAT('%', :text, '%'))
+			)
+			AND (:categoryId IS NULL OR s.category.id = :categoryId)
+			""")
+			Page<Song> findWithFilters(
+			    @Param("text") String text,
+			    @Param("categoryId") Long categoryId,
+			    Pageable pageable
+			);
 }

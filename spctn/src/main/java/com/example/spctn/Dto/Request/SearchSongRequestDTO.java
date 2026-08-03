@@ -12,11 +12,9 @@ import lombok.Setter;
 public class SearchSongRequestDTO {
 
 	@NotBlank
-	@Size(max = 40, message = "The title must not exceed 40 characters")
-    private String title;
-    
-    @NotBlank
-    private String cartoon;
+	@Size(max = 40, message = "The text must not exceed 40 characters")
+    private String text;
+
     
 
     private Long category;

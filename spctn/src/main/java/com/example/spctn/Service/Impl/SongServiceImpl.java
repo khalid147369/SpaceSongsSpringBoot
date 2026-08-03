@@ -185,6 +185,7 @@ public class SongServiceImpl implements SongService {
     	sngToSave.setDescripcion(datos.description());
     	sngToSave.setLanguage(datos.language());
     	sngToSave.setAnoEmision(datos.year());
+    	
       
         return repository.save(sngToSave);
         
@@ -282,9 +283,9 @@ public class SongServiceImpl implements SongService {
     }
 
 	@Override
-	public Page<Song> findWithFilters(String titulo, String cartoon, Long categoryId, Pageable pageable) {
+	public Page<Song> findWithFilters(String text, Long categoryId, Pageable pageable) {
 
-		return repository.findWithFilters(titulo, cartoon, categoryId, pageable);
+		return repository.findWithFilters(text, categoryId, pageable);
 	}
     
 }
