@@ -25,18 +25,18 @@ public class SongRequestDTO {
 	@NotNull
     private Long category;
 	
-	@NotNull
+	 
 	private String description;
 	
 	private SongStatus status;
 	
-	@NotNull
+
 	private String trivia;
 	
-	@NotNull
+	
 	private String aboutStory;
 	
-	@NotNull
+	
 	private String language;
 	
 	@NotNull
