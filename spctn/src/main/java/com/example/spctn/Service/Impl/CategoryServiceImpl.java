@@ -22,11 +22,18 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final CloudinaryService cloudinaryService;
+    private final MetricServiceImpl metricServiceImpl;
     @Override
     public List<CategoryResponseDTO> findAll() {
         return categoryRepository.findAll()
                 .stream()
                 .map(categoryMapper::toResponse)
+                .map(dto -> {
+                    // 💡 Aquí calculas o asignas el valor a tu atributo
+                    dto.setSongCount(metricServiceImpl.countSongsByCategory(dto.getId()));
+                    
+                    return dto; // Devuelves el DTO ya modificado
+                })
                 .toList();
     }
 
@@ -34,7 +41,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDTO findById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada con ID: " + id));
-        return categoryMapper.toResponse(category);
+        CategoryResponseDTO categoryDto = categoryMapper.toResponse(category);
+        categoryDto.setSongCount(metricServiceImpl.countSongsByCategory(id));
+        return categoryDto;
     }
 
     @Override

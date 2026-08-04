@@ -10,4 +10,5 @@ public class CategoryResponseDTO {
     private String descripcion;
     private String imageUrl;
     private OffsetDateTime updatedAt;
+    private Long songCount;
 }
