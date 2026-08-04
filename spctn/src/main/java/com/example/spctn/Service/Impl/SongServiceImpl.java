@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -275,11 +276,11 @@ public class SongServiceImpl implements SongService {
     }
     
 
-    public Page<Song> getTrendingThisWeek(int limit) {
-    	OffsetDateTime haceUnaSemana = OffsetDateTime.now().minusDays(7);
+    public Page<Song> getTrendingThisWeek(@RequestParam(required = false) Long categoryId ,int limit) {
+    	OffsetDateTime haceUnaSemana = OffsetDateTime.now().minusDays(14);
         Pageable pageable = PageRequest.of(0, limit);
             
-        return listenRepository.findTrendingSongsSince(haceUnaSemana, pageable);
+        return listenRepository.findTrendingSongsSince(haceUnaSemana,categoryId, pageable);
     }
 
 	@Override

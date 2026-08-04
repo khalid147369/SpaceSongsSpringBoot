@@ -155,9 +155,10 @@ public class SongController {
     
     @GetMapping("/trending")
     public ResponseEntity<Page<SongResponseDTO>> getTrendingThisWeek(
+    		@RequestParam(required = false) Long category,
             @RequestParam(defaultValue = "10") int limit) {
 
-        Page<SongResponseDTO> trendingSongs = service.getTrendingThisWeek(limit)
+        Page<SongResponseDTO> trendingSongs = service.getTrendingThisWeek(category,limit)
 
                 .map(mapper::toResponse);
 
