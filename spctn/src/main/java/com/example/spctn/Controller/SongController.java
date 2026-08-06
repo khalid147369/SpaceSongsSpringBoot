@@ -60,9 +60,10 @@ public class SongController {
     public ResponseEntity<Page<SongResponseDTO>> findAll(
     		@RequestParam(required = false) String titulo,
     		@RequestParam(required = false) Long category,
+    		@RequestParam(required = false) Boolean isNew,
     		@RequestParam(required = false) String numEscuchas,
             @PageableDefault(page = 0, size = 20, sort = "titulo", direction = Sort.Direction.ASC) Pageable pageable) {
-    	Page<SongResponseDTO> songs =service.findAll(titulo,category,pageable).map(mapper::toResponse);
+    	Page<SongResponseDTO> songs =service.findAll(titulo,category,isNew,pageable).map(mapper::toResponse);
         return ResponseEntity.ok(songs) ;
     }
 

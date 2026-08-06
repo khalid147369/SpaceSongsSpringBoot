@@ -45,6 +45,6 @@ public class SavedSongServiceImpl implements SavedSongService {
 
     @Override
     public List<SavedSong> findAll() {
-        return repository.findByUserId(userService.getAuthenticatedUser().getId());
+        return repository.findByUserIdOrderByFechaDesc(userService.getAuthenticatedUser().getId());
     }
 }

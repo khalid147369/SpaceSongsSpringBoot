@@ -73,7 +73,7 @@ public class UserController {
     
     @GetMapping("/recentlyPlayedSongs")
     public ResponseEntity<Page<SongResponseDTO>> favoriteSongs(
-    		@PageableDefault(page = 0, size = 20) Pageable pageable) {
+    		@PageableDefault(page = 0, size = 20 ,sort="id") Pageable pageable) {
     	Page<SongResponseDTO> songs = service.lastSongPlayed(pageable).map(songMapper::toResponse);
         return ResponseEntity.ok(songs);
     }

@@ -15,8 +15,14 @@ import org.springframework.data.repository.query.Param;
 public interface ListenRepository extends JpaRepository<Listen, Long> {
 	long countBySongId(Long songId);
 	
-	@Query("SELECT DISTINCT l.song FROM Listen l WHERE l.user.id = :userId")
-    Page<Song> findByUserId(@Param("userId") Long userId, Pageable pageable);
+	@Query("""
+		    SELECT l.song 
+		    FROM Listen l 
+		    WHERE l.user.id = :userId 
+		    GROUP BY l.song 
+		    ORDER BY MAX(l.fecha) DESC
+		""")
+		Page<Song> findByUserId(@Param("userId") Long userId, Pageable pageable);
 	// Devuelve las entidades Song directamente ordenadas por las más escuchadas desde una fecha
 	
 	@Query("""

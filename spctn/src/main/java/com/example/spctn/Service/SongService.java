@@ -17,7 +17,7 @@ import com.example.spctn.Entity.User;
 
 public interface SongService {
 
-	public Page<Song> findAll(String title ,Long category, Pageable pageable);
+	public Page<Song> findAll(String title ,Long category,Boolean isNew, Pageable pageable);
 	
 	public Song findById(Long id);
 	

@@ -56,13 +56,16 @@ public class SongServiceImpl implements SongService {
         this.geminiService=geminiService;
     }
 
-    public Page<Song> findAll(String title,Long category,Pageable pageable) {
+    public Page<Song> findAll(String title,Long category,Boolean isNew,Pageable pageable) {
     	 
     	if (title != null && !title.isEmpty()) {
             return repository.findByTituloContainingIgnoreCase(title, pageable);
         }
     	if (category != null) {
             return repository.findByCategoryId(category, pageable);
+        }
+    	if (isNew != null) {
+            return repository.findByIsNew(isNew, pageable);
         }
         return repository.findAll(pageable);
     }
@@ -288,5 +291,7 @@ public class SongServiceImpl implements SongService {
 
 		return repository.findWithFilters(text, categoryId, pageable);
 	}
+
+
     
 }

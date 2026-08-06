@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SavedSongRepository extends JpaRepository<SavedSong, Long> {
-	List<SavedSong> findByUserId(Long userId);
+	List<SavedSong> findByUserIdOrderByFechaDesc(Long userId);
 	
 	long countBySongId(Long songId);
 	
