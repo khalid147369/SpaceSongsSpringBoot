@@ -10,7 +10,8 @@ import com.example.spctn.Mapper.SongMapper;
 import com.example.spctn.Repository.LikeRepository;
 import com.example.spctn.Service.LikeService;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,6 +89,15 @@ public class LikeServiceImpl implements LikeService {
     	Song song = repository.findLastLikedSongByUserId(userId).orElseThrow(()-> new ResourceNotFoundException("song not found") );
     	
     	return songMapper.toResponse(song);
+    }
+    
+    @Override
+    public Page<SongResponseDTO> findMostLikedSongs(Pageable pageable) {
+        // 1. Obtenemos la página de entidades 'Song' desde la base de datos
+        Page<Song> songsPage = repository.findMostLikedSongs(pageable);
+        
+        // 2. Mapeamos cada 'Song' a 'SongResponseDTO' usando el método .map() de Page
+        return songsPage.map(songMapper::toResponse);
     }
 
 }

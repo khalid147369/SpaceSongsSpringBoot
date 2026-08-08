@@ -3,6 +3,7 @@ package com.example.spctn.Repository;
 
 import com.example.spctn.Entity.Song;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,8 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 	
 	List<Song> findByCategoryId(Long CategoryId);
 	
-	Page<Song> findByIsNew(Boolean isNew, Pageable pageable);
+	@Query("SELECT s FROM Song s WHERE s.fechaCreacion >= :limitDate ORDER BY s.fechaCreacion DESC")
+	Page<Song> findNewSongs(@Param("limitDate") OffsetDateTime limitDate, Pageable pageable);
 	
 	Page<Song> findAll(Pageable pageable);
 	

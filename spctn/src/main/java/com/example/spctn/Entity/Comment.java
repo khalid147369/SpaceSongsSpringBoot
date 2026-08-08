@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import java.time.OffsetDateTime;
 
+import com.example.spctn.Enums.CommentStatus;
+
 
 @Getter
 @Setter
@@ -22,6 +24,8 @@ public class Comment {
     private String texto;
 
     private OffsetDateTime fecha;
+    
+    private CommentStatus estado=CommentStatus.PUBLISHED;
 
     @ManyToOne
     private User user;

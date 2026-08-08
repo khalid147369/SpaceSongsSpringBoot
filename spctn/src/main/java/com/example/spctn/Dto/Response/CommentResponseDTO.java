@@ -18,6 +18,7 @@ public class CommentResponseDTO {
 	    private OffsetDateTime date;
 	    private Long userId;
 	    private Long songId;
+	    private String state;
 
 
 }

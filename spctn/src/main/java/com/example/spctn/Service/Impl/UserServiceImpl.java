@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
 		}
 
         if (user.getEmail()== null && user.getNombre() == null && user.getPassword() == null && user.getFotoPerfil() == null) {
-			throw new BadRequestException("all required fields must be filled");
+			throw new BadRequestException("at least one field must be filled");
 		}
         if (user.getEmail()!=null) {
 			existente.setEmail(user.getEmail());

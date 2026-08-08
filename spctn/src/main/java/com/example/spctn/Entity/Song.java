@@ -70,7 +70,6 @@ public class Song {
         OffsetDateTime limitDate = OffsetDateTime.now().minusDays(3);
         boolean isAfter = this.fechaCreacion.isAfter(limitDate);
         
-        this.isNew=isAfter;
         return isAfter ;
     }
     

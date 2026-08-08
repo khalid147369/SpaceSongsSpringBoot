@@ -64,8 +64,9 @@ public class SongServiceImpl implements SongService {
     	if (category != null) {
             return repository.findByCategoryId(category, pageable);
         }
-    	if (isNew != null) {
-            return repository.findByIsNew(isNew, pageable);
+    	if (isNew != null && isNew==true) {
+    		OffsetDateTime limitDate = OffsetDateTime.now().minusDays(3);
+            return repository.findNewSongs(limitDate, pageable);
         }
         return repository.findAll(pageable);
     }

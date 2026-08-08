@@ -12,6 +12,7 @@ import com.example.spctn.Dto.Response.CommentResponseDTO;
 import com.example.spctn.Entity.Comment;
 import com.example.spctn.Entity.Song;
 import com.example.spctn.Entity.User;
+import com.example.spctn.Enums.CommentStatus;
 import com.example.spctn.Service.SongService;
 import com.example.spctn.Service.UserService;
 
@@ -37,6 +38,7 @@ public class CommentMapper {
         dto.setUserId(comentario.getUser().getId());
         dto.setSongId(comentario.getSong().getId());
         dto.setAvatar(comentario.getUser().getFotoPerfil());
+        dto.setState(comentario.getEstado().toString());
 
         return dto;
     }
@@ -52,6 +54,7 @@ public class CommentMapper {
         comentario.setFecha(OffsetDateTime.now());
         comentario.setUser(user);
         comentario.setSong(song);
+        comentario.setEstado(CommentStatus.PUBLISHED);
 
         return comentario;
     }
