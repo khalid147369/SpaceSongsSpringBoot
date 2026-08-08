@@ -38,7 +38,10 @@ public class CommentMapper {
         dto.setUserId(comentario.getUser().getId());
         dto.setSongId(comentario.getSong().getId());
         dto.setAvatar(comentario.getUser().getFotoPerfil());
-        dto.setState(comentario.getEstado().toString());
+        if (comentario.getEstado()!=null) {
+			        dto.setState(comentario.getEstado().toString());
+
+		}
 
         return dto;
     }

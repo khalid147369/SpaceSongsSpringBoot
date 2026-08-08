@@ -119,9 +119,15 @@ public class UserServiceImpl implements UserService {
         	throw new ResourceNotFoundException("user not found");
 		}
 
-        if (user.getEmail()== null && user.getNombre() == null && user.getPassword() == null && user.getFotoPerfil() == null) {
-			throw new BadRequestException("at least one field must be filled");
-		}
+        if ((user.getEmail() == null || user.getEmail().isBlank())
+                && (user.getNombre() == null || user.getNombre().isBlank())
+                && (user.getPassword() == null || user.getPassword().isBlank())
+                && user.getFotoPerfil() == null
+                && (user.getDescreption() == null || user.getDescreption().isBlank())
+                && user.getCategory() == null) {
+
+            throw new BadRequestException("At least one field must be filled");
+        }
         if (user.getEmail()!=null) {
 			existente.setEmail(user.getEmail());
 		}
