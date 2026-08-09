@@ -2,6 +2,7 @@ package com.example.spctn.Service.Impl;
 
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
+import com.example.spctn.Dto.Request.SongUpdateRequestDTO;
 import com.example.spctn.Dto.Response.CloudinaryResponse;
 import com.example.spctn.Dto.Response.SongDetailsDTO;
 import com.example.spctn.Dto.Response.SongResponseDTO;
@@ -196,7 +197,7 @@ public class SongServiceImpl implements SongService {
         
     }
 
-    public SongResponseDTO update(Long id, SongRequestDTO song) throws IOException {
+    public SongResponseDTO update(Long id, SongUpdateRequestDTO song) throws IOException {
     	
         if (song==null || id==null) {
         	throw new BadRequestException("Song and id shoud not be null");
@@ -240,8 +241,12 @@ public class SongServiceImpl implements SongService {
 			 sn.setCategory(category);
 		}
         
-        if (song.getTitle()!=null) {
+        if (song.getTrivia()!=null) {
 			 sn.setTrivia(song.getTrivia());
+		}
+        
+        if (song.getCartoon()!=null) {
+			 sn.setCartoon(song.getCartoon());
 		}
         
         if (song.getAboutStory()!=null) {
@@ -254,6 +259,9 @@ public class SongServiceImpl implements SongService {
         
         if (song.getLanguage()!=null) {
 			 sn.setLanguage(song.getLanguage());
+		}
+        if (song.getStatus()!=null) {
+			 sn.setEstado(song.getStatus());
 		}
         
 

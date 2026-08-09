@@ -30,7 +30,7 @@ public class Song {
     private String cartoon;
     
     @Enumerated(EnumType.STRING)
-    private SongStatus estado=SongStatus.DRAFT;
+    private SongStatus estado=SongStatus.PUBLISHED;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")

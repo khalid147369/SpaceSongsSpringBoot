@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.spctn.Dto.Request.SongRequestDTO;
+import com.example.spctn.Dto.Request.SongUpdateRequestDTO;
 import com.example.spctn.Dto.Response.SongResponseDTO;
 import com.example.spctn.Entity.Like;
 import com.example.spctn.Entity.Song;
@@ -23,7 +24,7 @@ public interface SongService {
 	
 	public Song save(SongRequestDTO songDto) throws IOException;
 	
-	public SongResponseDTO update(Long id, SongRequestDTO song) throws IOException;
+	public SongResponseDTO update(Long id, SongUpdateRequestDTO song) throws IOException;
 	
 	public void delete(Long id) throws IOException;
 	

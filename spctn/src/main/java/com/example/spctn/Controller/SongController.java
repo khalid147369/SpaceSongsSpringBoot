@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.spctn.Dto.Request.SearchSongRequestDTO;
 import com.example.spctn.Dto.Request.SongRequestDTO;
-
+import com.example.spctn.Dto.Request.SongUpdateRequestDTO;
 import com.example.spctn.Dto.Response.LikeResponseDTO;
 import com.example.spctn.Dto.Response.SongDetailsDTO;
 import com.example.spctn.Dto.Response.SongResponseDTO;
@@ -127,7 +127,7 @@ public class SongController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<SongResponseDTO>  update(@PathVariable Long id,@Valid @ModelAttribute SongRequestDTO song) throws IOException {
+    public ResponseEntity<SongResponseDTO>  update(@PathVariable Long id,@Valid @ModelAttribute SongUpdateRequestDTO song) throws IOException {
     	
     	
     	
