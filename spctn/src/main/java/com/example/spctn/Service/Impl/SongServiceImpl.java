@@ -288,9 +288,9 @@ public class SongServiceImpl implements SongService {
     }
     
 
-    public Page<Song> getTrendingThisWeek(@RequestParam(required = false) Long categoryId ,int limit) {
+    public Page<Song> getTrendingThisWeek(@RequestParam(required = false) Long categoryId ,Pageable pageable) {
     	OffsetDateTime haceUnaSemana = OffsetDateTime.now().minusDays(14);
-        Pageable pageable = PageRequest.of(0, limit);
+  
             
         return listenRepository.findTrendingSongsSince(haceUnaSemana,categoryId, pageable);
     }

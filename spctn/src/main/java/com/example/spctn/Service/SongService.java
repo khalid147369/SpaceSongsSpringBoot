@@ -37,7 +37,7 @@ public interface SongService {
 	
 	public List<Like> getLikes(Long id);
 	
-	public Page<Song> getTrendingThisWeek(@RequestParam(required = false) Long categoryId ,int limit);
+	public Page<Song> getTrendingThisWeek(@RequestParam(required = false) Long categoryId ,Pageable pageable);
 	
 
 	Page<Song> findWithFilters(String text, Long categoryId, Pageable pageable);
