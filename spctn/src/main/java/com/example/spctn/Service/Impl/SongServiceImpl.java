@@ -229,6 +229,7 @@ public class SongServiceImpl implements SongService {
         	String publicId = audioResponse.getPublicId();
 			 sn.setUrl(urlAudio);
 			 sn.setAudioPublicId(publicId);
+			 sn.setDuracion(audioResponse.getDuration());
 		}
         
         if (song.getTitle()!=null) {
