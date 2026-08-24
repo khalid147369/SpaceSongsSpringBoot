@@ -72,7 +72,8 @@ public class SecurityConfig {
                     		 	"/songs/trending",
                     	        "/songs/getSingle/*",
                     	        "/songs/*/comments",
-                    	        "/songs/*/likes/count").permitAll()
+                    	        "/songs/*/likes/count",
+                    	        "/listens/*").permitAll()
                      
                      .requestMatchers(HttpMethod.GET, "/comments/*").permitAll()
                      .anyRequest().authenticated())

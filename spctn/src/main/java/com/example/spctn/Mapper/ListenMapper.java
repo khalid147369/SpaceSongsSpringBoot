@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.example.spctn.Dto.Response.ListenResponseDTO;
 
 import com.example.spctn.Entity.Listen;
-
+import com.example.spctn.Exeption.ResourceNotFoundException;
 import com.example.spctn.Service.SongService;
 import com.example.spctn.Service.UserService;
 
@@ -30,10 +30,14 @@ public class ListenMapper {
 
         ListenResponseDTO dto = new ListenResponseDTO();
 
+        //el user puede ser null aquí
+        if (listen.getUser()!=null) {
+			dto.setUserId(listen.getUser().getId());
+        dto.setUsuario(listen.getUser().getNombre());
+		}
         dto.setId(listen.getId());
 
-        dto.setUserId(listen.getUser().getId());
-        dto.setUsuario(listen.getUser().getNombre());
+        
 
         dto.setFecha(listen.getFecha());
         
@@ -49,7 +53,14 @@ public class ListenMapper {
 
         
         listen.setFecha(OffsetDateTime.now());
-        listen.setUser(userService.getAuthenticatedUser());
+        
+        //establecer el user null si no inició sesión
+        try {
+        	listen.setUser(userService.getAuthenticatedUser());
+		} catch (ResourceNotFoundException e) {
+			listen.setUser(null);
+		}
+        
         listen.setSong(songService.findById(songId));
 
         return listen;
