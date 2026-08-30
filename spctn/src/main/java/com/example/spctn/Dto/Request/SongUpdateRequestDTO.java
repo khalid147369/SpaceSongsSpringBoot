@@ -16,7 +16,7 @@ import lombok.Setter;
 public class SongUpdateRequestDTO {
 
 
-	@Size(max = 40, message = "The title must not exceed 40 characters")
+	@Size(max = 120, message = "The title must not exceed 120 characters")
     private String title;
     
     
