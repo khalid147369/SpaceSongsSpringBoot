@@ -265,7 +265,22 @@ public class SongServiceImpl implements SongService {
 			 sn.setEstado(song.getStatus());
 		}
         
+        if (song.getVideo()!=null) {
+			 sn.setVideo(song.getVideo());
+		}
 
+      //Ai genaration
+        if (song.getTitle()!=null || song.getCartoon()!=null || song.getCategory()!=null ) {
+			SongDetailsDTO datos = geminiService.generateFullSongDetails(sn.getTitulo(), sn.getCategory().getNombre(),sn.getCartoon());
+    	
+	    	sn.setTrivia(datos.trivia());
+	    	sn.setAboutStory(datos.aboutStory());
+	    	sn.setDescripcion(datos.description());
+	    	sn.setLanguage(datos.language());
+	    	sn.setAnoEmision(datos.year());
+		}
+    	
+        
         return mapper.toResponse(repository.save(sn)) ;
     }
 

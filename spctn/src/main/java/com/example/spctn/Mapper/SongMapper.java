@@ -39,6 +39,7 @@ public class SongMapper {
         dto.setLanguage(song.getLanguage());
         dto.setAboutStory(song.getAboutStory());
         dto.setCartoon(song.getCartoon());
+        dto.setVideo(song.getVideo());
         
         // quita las condiciones después 
         if (song.getEstado()!= null) {

@@ -26,6 +26,8 @@ public class Song {
     private String url;
 
     private String imagen;
+    
+    private String video;
 
     private String cartoon;
     

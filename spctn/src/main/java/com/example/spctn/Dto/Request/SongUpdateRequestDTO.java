@@ -22,6 +22,7 @@ public class SongUpdateRequestDTO {
     
     private String cartoon;
     
+    private String video;
 	
     private Long category;
 	

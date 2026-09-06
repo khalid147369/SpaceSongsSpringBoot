@@ -22,6 +22,8 @@ public class SongRequestDTO {
     @NotBlank
     private String cartoon;
     
+    private String video;
+    
 	@NotNull
     private Long category;
 	
