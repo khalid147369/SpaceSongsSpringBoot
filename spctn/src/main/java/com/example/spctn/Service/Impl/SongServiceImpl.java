@@ -182,7 +182,7 @@ public class SongServiceImpl implements SongService {
     	sngToSave.setDuracion(duracion);
     	sngToSave.setImagePublicId(imagePublicId);
     	sngToSave.setAudioPublicId(audioPublicId);
-    	
+    	sngToSave.setVideo(songDto.getVideo());
     	//Ai genaration
     	SongDetailsDTO datos = geminiService.generateFullSongDetails(sngToSave.getTitulo(), sngToSave.getCategory().getNombre(),sngToSave.getCartoon());
     	
