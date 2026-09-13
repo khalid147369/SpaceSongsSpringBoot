@@ -65,8 +65,13 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public User findById() {
+    public User findCurrentUser() {
         return getAuthenticatedUser();
+    }
+    
+    @Override
+    public User findById(Long id) {
+        return repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
     }
 
     @Override

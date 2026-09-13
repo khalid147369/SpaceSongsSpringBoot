@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import com.example.spctn.Dto.Request.UserRequestDTO;
 import com.example.spctn.Dto.Request.UserUpdateRequestDTO;
 import com.example.spctn.Dto.Response.SongResponseDTO;
+import com.example.spctn.Dto.Response.UserByIdResponseDTO;
 import com.example.spctn.Dto.Response.UserResponseDTO;
 import com.example.spctn.Entity.Category;
 import com.example.spctn.Entity.User;
 import com.example.spctn.Mapper.SongMapper;
+import com.example.spctn.Mapper.UserByIdMapper;
 import com.example.spctn.Mapper.UserMapper;
 import com.example.spctn.Service.CategoryService;
 import com.example.spctn.Service.UserService;
@@ -34,10 +36,13 @@ public class UserController {
     private final UserService service;
     private final MetricServiceImpl metricService;
     private final UserMapper mapper;
+    private final UserByIdMapper userByIdMapper;
     private final SongMapper songMapper;
-    public UserController(UserService service , UserMapper mapper,SongMapper songMapper,MetricServiceImpl metricService) {
+    public UserController(UserService service , UserMapper mapper,SongMapper songMapper,MetricServiceImpl metricService,UserByIdMapper userByIdMapper) {
         this.service = service;
         this.mapper = mapper;
+        this.userByIdMapper = userByIdMapper;
+
         this.songMapper = songMapper;
         this.metricService = metricService;
 
@@ -64,7 +69,16 @@ public class UserController {
      */
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> findMe() {
-    	UserResponseDTO us = mapper.toResponse(service.findById());
+    	UserResponseDTO us = mapper.toResponse(service.findCurrentUser());
+    	us.setTotalComments(metricService.countTotalCommentsByUser());
+    	us.setTotalLikes(metricService.countTotalLikesByUser());
+    	us.setTotalSongsSaved(metricService.countTotalSavedSongByUser());
+        return ResponseEntity.ok(us);
+    }
+    
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserByIdResponseDTO> findUser(@PathVariable Long id) {
+    	UserByIdResponseDTO us = userByIdMapper.toResponse(service.findById(id));
     	us.setTotalComments(metricService.countTotalCommentsByUser());
     	us.setTotalLikes(metricService.countTotalLikesByUser());
     	us.setTotalSongsSaved(metricService.countTotalSavedSongByUser());

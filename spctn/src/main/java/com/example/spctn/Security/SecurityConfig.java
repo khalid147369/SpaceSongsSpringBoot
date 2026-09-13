@@ -75,7 +75,7 @@ public class SecurityConfig {
                     	        "/songs/*/likes/count",
                     	        "/listens/*").permitAll()
                      
-                     .requestMatchers(HttpMethod.GET, "/comments/*").permitAll()
+                     .requestMatchers(HttpMethod.GET, "/comments/*","/users/user/*").permitAll()
                      .anyRequest().authenticated())
                         
                 .addFilterBefore(

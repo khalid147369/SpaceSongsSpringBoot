@@ -18,8 +18,6 @@ public interface UserService {
 
 	    List<User> findAll();
 
-	    User findById();
-
 
 
 	    void delete(Long id);
@@ -33,6 +31,10 @@ public interface UserService {
 		UserResponseDTO save(UserRequestDTO user) throws IOException;
 
 		User update(UserUpdateRequestDTO user) throws IOException;
+
+		User findCurrentUser();
+
+		User findById(Long id);
 
 		
 	
