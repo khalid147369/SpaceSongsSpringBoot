@@ -79,9 +79,9 @@ public class UserController {
     @GetMapping("/user/{id}")
     public ResponseEntity<UserByIdResponseDTO> findUser(@PathVariable Long id) {
     	UserByIdResponseDTO us = userByIdMapper.toResponse(service.findById(id));
-    	us.setTotalComments(metricService.countTotalCommentsByUser());
-    	us.setTotalLikes(metricService.countTotalLikesByUser());
-    	us.setTotalSongsSaved(metricService.countTotalSavedSongByUser());
+    	us.setTotalComments(metricService.countTotalCommentsByUser(id));
+    	us.setTotalLikes(metricService.countTotalLikesByUser(id));
+    	us.setTotalSongsSaved(metricService.countTotalSavedSongByUser(id));
         return ResponseEntity.ok(us);
     }
     

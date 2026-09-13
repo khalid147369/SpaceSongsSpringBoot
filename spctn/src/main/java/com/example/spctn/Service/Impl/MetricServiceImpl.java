@@ -94,6 +94,18 @@ public class MetricServiceImpl {
     	Long userId = userServiceImpl.getAuthenticatedUser().getId();
         return commentRepository.countByUserId(userId);
     }
+    
+    public long countTotalLikesByUser(Long userId) {
+        return likeRepository.countByUserId(userId);
+    }
+    
+    public long countTotalSavedSongByUser(Long userId) {
+        return savedSongRepository.countByUserId(userId);
+    }
+    
+    public long countTotalCommentsByUser(Long userId) {
+        return commentRepository.countByUserId(userId);
+    }
 
 
 }
